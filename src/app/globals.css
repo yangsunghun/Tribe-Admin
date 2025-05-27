@@ -2,27 +2,148 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer utilities {
+  .inner {
+    @apply mx-auto w-[83%] lt:w-[91.45%];
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  .click-box {
+    @apply absolute left-0 top-0 block h-full w-full;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  .ellip1 {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+
+  .ellip2 {
+    @apply clear-both line-clamp-2 overflow-hidden text-ellipsis break-words;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .skeleton-effect {
+    @apply animate-pulse rounded bg-gray-200;
+  }
+
+  /* .skeleton-effect2 {
+    @apply animate-gradient rounded bg-gradient-to-r from-bg-02 via-gray-200 to-bg-02 bg-[length:500%_auto];
+  } */
+
+  .thumbnail {
+    @apply relative overflow-hidden;
+  }
+
+  .thumbnail > img {
+    @apply object-cover object-center;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shadow-normal {
+    @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.12)];
+  }
+
+  .shadow-emphasize {
+    @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.12)];
+  }
+
+  .shadow-strong {
+    @apply shadow-[0px_0px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_4px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_6px_12px_0px_rgba(0,0,0,0.12)];
+  }
+
+  .shadow-heavy {
+    @apply shadow-[0px_0px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_16px_20px_0px_rgba(0,0,0,0.12)] shadow-[0px_8px_16px_0px_rgba(0,0,0,0.08)];
+  }
+
+  .image-modal .carousel {
+    @apply fixed inset-0 flex h-screen w-screen items-center;
+  }
 }
+
+.image-modal .swiper .swiper-pagination {
+  @apply bottom-20 tb:bottom-5;
+}
+
+/* .swiper .swiper-pagination .swiper-pagination-bullet {
+  @apply bg-bg-01 opacity-100;
+} */
+
+/* .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  @apply bg-primary-default opacity-100;
+} */
+
+.swiper .swiper-pagination .swiper-pagination-bullet {
+  @apply !mx-[4px] h-[8px] w-[8px] tb:!mx-[3px] tb:h-[6px] tb:w-[6px];
+}
+
+/* .image-modal .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  @apply bg-primary-default;
+} */
+
+/* input type=search x button 제거 */
+/* WebKit browsers */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Firefox */
+input[type="search"]::-moz-search-cancel-button {
+  display: none;
+}
+
+/* Edge */
+input[type="search"]::-ms-clear {
+  display: none;
+}
+
+/* 파일 인풋 커서 포인터 안 먹는 이슈 해결 */
+input[type=file], /* FF, IE7+, chrome */
+input[type=file]::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+/* shadcn용 radius 변경시 수정 */
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+/* 스크롤바 너비 및 높이 */
+html::-webkit-scrollbar,
+.scroll-custom::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* 스크롤바 트랙 (배경) */
+html::-webkit-scrollbar-track,
+.scroll-custom::-webkit-scrollbar-track {
+  background: theme("colors.gray.50");
+  border-radius: 8px;
+}
+
+/* 스크롤바 손잡이 */
+/* html::-webkit-scrollbar-thumb,
+.scroll-custom::-webkit-scrollbar-thumb {
+  background: theme("colors.text.02");
+  border-radius: 10px;
+  border: 2px solid theme("colors.gray.50");
+} */
+
+/* 스크롤바 손잡이 호버 시 */
+html::-webkit-scrollbar-thumb:active,
+.scroll-custom::-webkit-scrollbar-thumb:active {
+  /* background: theme("colors.primary.default"); */
+  background: theme("colors.primary.500");
+}
+
+/* div[style*="border: 1px solid rgb(118, 129, 168)"] {
+  display: none !important;
+} */

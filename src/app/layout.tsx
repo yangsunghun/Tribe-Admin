@@ -1,24 +1,32 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { ReactNode } from "react";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const pretendard = localFont({
+  src: "../assets/fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "100 900",
+  variable: "--font-pretendard"
+});
 
 export const metadata: Metadata = {
-  title: "Tribe Admin",
-  description: "Tribe Admin Dashboard",
+  title: "Tribe 관리자 페이지",
+  description: "Tribe 관리자 페이지 입니다"
 };
 
 export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+  children
+}: Readonly<{
+  children: ReactNode;
+}>) {
   return (
-    <html lang="ko">
-      <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+    <html lang="ko" className="min-h-screen">
+      <body className={pretendard.className}>
+        <AuthProvider>
+          <main className="bg-bg-light">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
