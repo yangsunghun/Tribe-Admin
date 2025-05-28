@@ -1,14 +1,19 @@
 "use client";
 
+import LogoImage from "@/assets/images/logo.svg";
 import { signOut } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
   return (
     <header className="bg-white shadow-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-[96vw]">
         <div className="flex h-16 items-center justify-between">
           <div className="shrink-0">
-            <h1 className="text-xl font-bold text-gray-900">Tribe Admin</h1>
+            <Link href="/">
+              <Image src={LogoImage} alt="Tribe" className="inline-block max-w-[80px]" />
+            </Link>
           </div>
           <div>
             <button

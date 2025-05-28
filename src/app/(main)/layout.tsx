@@ -1,4 +1,5 @@
 import Header from "@/components/layout/Header";
+import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -12,10 +13,11 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <>
+    <SidebarProvider>
       <Header />
+      <Sidebar />
       <main className="bg-bg-light">{children}</main>
-    </>
+    </SidebarProvider>
   );
 };
 
