@@ -84,7 +84,7 @@ const LoginForm = () => {
             <button
               type="button"
               tabIndex={-1}
-              className="ml-2 p-1 focus:outline-none"
+              className="ml-2 focus:outline-none"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
             >

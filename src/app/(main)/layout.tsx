@@ -12,10 +12,10 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <>
       <Header />
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</main>
-    </div>
+      <main className="bg-bg-light">{children}</main>
+    </>
   );
 };
 

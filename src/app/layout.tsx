@@ -24,9 +24,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="min-h-screen">
       <body className={pretendard.className}>
-        <AuthProvider>
-          <main className="bg-bg-light">{children}</main>
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
