@@ -4,20 +4,20 @@ import Eye from "@/assets/icons/Eye";
 import EyeSlash from "@/assets/icons/EyeSlash";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
-function EyeIcon({ visible }: { visible: boolean }) {
+const EyeIcon = ({ visible }: { visible: boolean }) => {
   return visible ? <EyeSlash className="size-5 text-gray-500" /> : <Eye className="size-5 text-gray-500" />;
-}
+};
 
-export default function LoginForm() {
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -103,4 +103,6 @@ export default function LoginForm() {
       </div>
     </form>
   );
-}
+};
+
+export default LoginForm;

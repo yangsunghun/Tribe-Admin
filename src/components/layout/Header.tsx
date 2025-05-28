@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 
-export default function Header() {
+const Header = () => {
   return (
     <header className="bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -13,7 +13,7 @@ export default function Header() {
           <div>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-sm inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
             >
               로그아웃
             </button>
@@ -22,4 +22,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;
