@@ -9,7 +9,7 @@ const LoginPage = async () => {
   const session = await getServerSession(authOptions);
 
   if (session) {
-    redirect("/main");
+    redirect("/members/list");
   }
 
   return (
