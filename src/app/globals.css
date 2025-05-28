@@ -1,114 +1,149 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer utilities {
-  .inner {
-    @apply mx-auto w-[83%] lt:w-[91.45%];
-  }
+@config '../../tailwind.config.ts';
 
-  .click-box {
-    @apply absolute left-0 top-0 block h-full w-full;
-  }
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-  .ellip1 {
-    @apply overflow-hidden text-ellipsis whitespace-nowrap;
-  }
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
 
-  .ellip2 {
-    @apply clear-both line-clamp-2 overflow-hidden text-ellipsis break-words;
+.login-form-container input:-webkit-autofill,
+.login-form-container input:-webkit-autofill:focus,
+.login-form-container input:-webkit-autofill:hover,
+.login-form-container input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
 }
 
-@layer components {
-  .skeleton-effect {
-    @apply animate-pulse rounded bg-gray-200;
-  }
+@utility inner {
+  @apply lt:w-[91.45%] mx-auto w-[83%];
+}
 
+@utility click-box {
+  @apply absolute top-0 left-0 block h-full w-full;
+}
+
+@utility ellip1 {
+  @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+
+@utility ellip2 {
+  @apply clear-both line-clamp-2 overflow-hidden break-words text-ellipsis;
+}
+
+@utility skeleton-effect {
+  @apply animate-pulse rounded-sm bg-gray-200;
+}
+
+@utility thumbnail {
   /* .skeleton-effect2 {
     @apply animate-gradient rounded bg-gradient-to-r from-bg-02 via-gray-200 to-bg-02 bg-[length:500%_auto];
   } */
+  @apply relative overflow-hidden;
 
-  .thumbnail {
-    @apply relative overflow-hidden;
-  }
-
-  .thumbnail > img {
+  & > img {
     @apply object-cover object-center;
   }
+}
 
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
     display: none;
   }
+}
 
-  .shadow-normal {
-    @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.12)];
-  }
+@utility shadow-normal {
+  @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.12)];
+}
 
-  .shadow-emphasize {
-    @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.12)];
-  }
+@utility shadow-emphasize {
+  @apply shadow-[0px_0px_1px_0px_rgba(0,0,0,0.08)] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.12)];
+}
 
-  .shadow-strong {
-    @apply shadow-[0px_0px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_4px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_6px_12px_0px_rgba(0,0,0,0.12)];
-  }
+@utility shadow-strong {
+  @apply shadow-[0px_0px_4px_0px_rgba(0,0,0,0.08)] shadow-[0px_4px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_6px_12px_0px_rgba(0,0,0,0.12)];
+}
 
-  .shadow-heavy {
-    @apply shadow-[0px_0px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_16px_20px_0px_rgba(0,0,0,0.12)] shadow-[0px_8px_16px_0px_rgba(0,0,0,0.08)];
-  }
+@utility shadow-heavy {
+  @apply shadow-[0px_0px_8px_0px_rgba(0,0,0,0.08)] shadow-[0px_8px_16px_0px_rgba(0,0,0,0.08)] shadow-[0px_16px_20px_0px_rgba(0,0,0,0.12)];
+}
 
-  .image-modal .carousel {
+@utility image-modal {
+  & .carousel {
     @apply fixed inset-0 flex h-screen w-screen items-center;
   }
 }
 
-.image-modal .swiper .swiper-pagination {
-  @apply bottom-20 tb:bottom-5;
+@utility carousel {
+  .image-modal & {
+    @apply fixed inset-0 flex h-screen w-screen items-center;
+  }
 }
 
-/* .swiper .swiper-pagination .swiper-pagination-bullet {
+@layer utilities {
+  .image-modal .swiper .swiper-pagination {
+    @apply tb:bottom-5 bottom-20;
+  }
+
+  /* .swiper .swiper-pagination .swiper-pagination-bullet {
   @apply bg-bg-01 opacity-100;
 } */
 
-/* .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  /* .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
   @apply bg-primary-default opacity-100;
 } */
 
-.swiper .swiper-pagination .swiper-pagination-bullet {
-  @apply !mx-[4px] h-[8px] w-[8px] tb:!mx-[3px] tb:h-[6px] tb:w-[6px];
-}
+  .swiper .swiper-pagination .swiper-pagination-bullet {
+    @apply tb:mx-[3px]! tb:h-[6px] tb:w-[6px] mx-[4px]! h-[8px] w-[8px];
+  }
 
-/* .image-modal .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  /* .image-modal .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
   @apply bg-primary-default;
 } */
 
-/* input type=search x button 제거 */
-/* WebKit browsers */
-input[type="search"]::-webkit-search-cancel-button {
-  display: none;
-}
+  /* input type=search x button 제거 */
+  /* WebKit browsers */
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
 
-/* Firefox */
-input[type="search"]::-moz-search-cancel-button {
-  display: none;
-}
+  /* Firefox */
+  input[type="search"]::-moz-search-cancel-button {
+    display: none;
+  }
 
-/* Edge */
-input[type="search"]::-ms-clear {
-  display: none;
-}
+  /* Edge */
+  input[type="search"]::-ms-clear {
+    display: none;
+  }
 
-/* 파일 인풋 커서 포인터 안 먹는 이슈 해결 */
-input[type=file], /* FF, IE7+, chrome */
+  /* 파일 인풋 커서 포인터 안 먹는 이슈 해결 */
+  input[type=file], /* FF, IE7+, chrome */
 input[type=file]::-webkit-file-upload-button {
-  cursor: pointer;
-}
+    cursor: pointer;
+  }
 
-/* shadcn용 radius 변경시 수정 */
+  /* shadcn용 radius 변경시 수정 */
+}
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -125,7 +160,7 @@ html::-webkit-scrollbar,
 /* 스크롤바 트랙 (배경) */
 html::-webkit-scrollbar-track,
 .scroll-custom::-webkit-scrollbar-track {
-  background: theme("colors.gray.50");
+  background: var(--color-gray-50);
   border-radius: 8px;
 }
 
@@ -141,7 +176,7 @@ html::-webkit-scrollbar-track,
 html::-webkit-scrollbar-thumb:active,
 .scroll-custom::-webkit-scrollbar-thumb:active {
   /* background: theme("colors.primary.default"); */
-  background: theme("colors.primary.500");
+  background: var(--color-primary-500);
 }
 
 /* div[style*="border: 1px solid rgb(118, 129, 168)"] {

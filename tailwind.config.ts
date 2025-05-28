@@ -4,7 +4,6 @@ const config: Config = {
   // darkMode: ["class"],
   content: ["./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
   // dynamic으로 사용시 필요 리스트
-  safelist: ["bg-[#ffeb00]", "bg-[#181717]", "text-[#1a1a1a]", "text-[#6e6e6e]", "border-[#d6d6d6]", "bg-[#0c6efd]"],
   theme: {
     fontSize: {
       heading: ["36px", { lineHeight: "150%", letterSpacing: "-0.025em" }], // Heading 36px
@@ -60,6 +59,7 @@ const config: Config = {
           info: "#00bf40"
         },
         bg: {
+          pale: "#f8fafc",
           light: "#eef2f6"
         },
         gray: {
@@ -170,13 +170,6 @@ const config: Config = {
         mb: { max: "480px" }, // 가장 큰 폰 크기
         mn: { max: "375px" } // 우리 모바일 디자인 시안 크기
       }
-    }
-  },
-  variants: {
-    extend: {
-      backgroundColor: ["checked"], // checked 상태에서 배경색 활성화
-      borderColor: ["checked"], // checked 상태에서 테두리색 활성화
-      textColor: ["checked"] // checked 상태에서 텍스트 색상 활성화
     }
   },
   plugins: [
