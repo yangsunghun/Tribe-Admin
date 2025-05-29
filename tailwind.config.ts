@@ -17,6 +17,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
+          DEFAULT: "#41DEAC",
           "50": "#ECFCF7",
           "100": "#C4F5E5",
           "200": "#A8F0D9",
@@ -29,6 +30,7 @@ const config: Config = {
           "900": "#1B5D48"
         },
         secondary: {
+          DEFAULT: "#F8680E",
           "50": "#FEF0E7",
           "100": "#FDD0B4",
           "200": "#FCBA90",
@@ -41,6 +43,7 @@ const config: Config = {
           "900": "#682C06"
         },
         teritiary: {
+          DEFAULT: "#07143A",
           "50": "#E6E8EB",
           "100": "#B2B6C2",
           "200": "#8D93A4",

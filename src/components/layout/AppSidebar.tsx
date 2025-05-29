@@ -1,6 +1,8 @@
 "use client";
 
-import { ChevronRight, FileText, Home, Settings, Users } from "lucide-react";
+import { navigationItems } from "@/config/navigation";
+import clsx from "clsx";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
@@ -17,64 +19,34 @@ import {
   SidebarMenuSubItem
 } from "../ui/sidebar";
 
-const navigationItems = [
-  {
-    name: "대시보드",
-    href: "/dashboard",
-    icon: Home
-  },
-  {
-    name: "회원 관리",
-    icon: Users,
-    subItems: [
-      {
-        name: "회원 목록",
-        href: "/members/list"
-      },
-      {
-        name: "회원 등록",
-        href: "/members/register"
-      }
-    ]
-  },
-  {
-    name: "문서 관리",
-    icon: FileText,
-    subItems: [
-      {
-        name: "문서 목록",
-        href: "/documents/list"
-      },
-      {
-        name: "문서 작성",
-        href: "/documents/create"
-      }
-    ]
-  },
-  {
-    name: "설정",
-    href: "/settings",
-    icon: Settings
-  }
-];
-
 const AppSidebar = () => {
   const pathname = usePathname();
 
+  const isSubMenuActive = (subItems: { href: string }[] | undefined) => {
+    if (!subItems) return false;
+    return subItems.some((item) => pathname === item.href);
+  };
+
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
+    <Sidebar className="pt-16">
+      <SidebarContent className="bg-white">
+        <SidebarGroup className="px-4">
           <SidebarGroupLabel>메뉴</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="text-body">
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   {item.subItems ? (
                     <Collapsible className="group/collapsible">
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton className="flex w-full justify-between">
-                          <div className="flex items-center gap-2">
+                        <SidebarMenuButton
+                          className={clsx(
+                            "flex h-12 w-full justify-between px-4",
+                            "hover:!text-primary-700 hover:!bg-primary-50 active:text-primary-800 transition-background transition-colors",
+                            isSubMenuActive(item.subItems) && "text-primary-700 bg-primary-50 font-semibold"
+                          )}
+                        >
+                          <div className={clsx("flex items-center gap-2")}>
                             <item.icon className="h-4 w-4" />
                             <span>{item.name}</span>
                           </div>
@@ -87,9 +59,10 @@ const AppSidebar = () => {
                             <SidebarMenuSubItem key={subItem.name}>
                               <Link
                                 href={subItem.href}
-                                className={`block px-2 py-1 text-sm ${
-                                  pathname === subItem.href ? "text-primary" : "text-muted-foreground"
-                                }`}
+                                className={clsx(
+                                  "block px-2 py-1 text-sm",
+                                  pathname === subItem.href ? "text-primary-700" : ""
+                                )}
                               >
                                 {subItem.name}
                               </Link>
@@ -99,12 +72,19 @@ const AppSidebar = () => {
                       </CollapsibleContent>
                     </Collapsible>
                   ) : (
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton
+                      className={clsx(
+                        "h-12 px-4",
+                        "hover:text-primary-700 hover:!bg-primary-50 active:text-primary-800 active:font-semibold"
+                      )}
+                      asChild
+                    >
                       <Link
                         href={item.href!}
-                        className={`flex items-center gap-2 ${
-                          pathname === item.href ? "text-primary" : "text-muted-foreground"
-                        }`}
+                        className={clsx(
+                          "flex items-center gap-2",
+                          pathname === item.href && "text-primary-700 font-semibold"
+                        )}
                       >
                         <item.icon className="h-4 w-4" />
                         <span>{item.name}</span>
