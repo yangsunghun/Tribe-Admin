@@ -1,6 +1,6 @@
 import { FileText, Home, Settings, Users, type LucideIcon } from "lucide-react";
 
-export interface NavItem {
+export interface NavMainItem {
   title: string;
   url?: string;
   icon?: LucideIcon;
@@ -11,7 +11,7 @@ export interface NavItem {
   }[];
 }
 
-export const navItems: NavItem[] = [
+export const navMainItems: NavMainItem[] = [
   {
     title: "대시보드",
     url: "/dashboard",
