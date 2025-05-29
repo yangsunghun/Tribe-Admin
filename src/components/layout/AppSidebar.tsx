@@ -102,7 +102,7 @@ const AppSidebar = () => {
                         "data-[state=collapsed]:justify-center data-[state=collapsed]:px-0"
                       )}
                       asChild
-                      tooltip={{ content: item.title, side: "right" }}
+                      tooltip={item.title}
                     >
                       <Link
                         href={item.url!}
