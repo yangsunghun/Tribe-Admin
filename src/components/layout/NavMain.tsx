@@ -33,7 +33,10 @@ const NavMain = ({ items }: NavMainProps) => {
   return (
     <SidebarGroup className="p-0">
       <SidebarGroupLabel
-        className={clsx("!text-caption text-primary-800 p-6 font-semibold", "data-[state=collapsed]:hidden")}
+        className={clsx(
+          "!text-caption text-primary-800 p-6 font-semibold transition-none",
+          "data-[state=collapsed]:hidden"
+        )}
       >
         Navigation
       </SidebarGroupLabel>
