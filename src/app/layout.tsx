@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="min-h-screen">
-      <body className={pretendard.className}>
+      <body className={`${pretendard.className}`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
