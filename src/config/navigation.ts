@@ -1,52 +1,53 @@
-import { FileText, Home, Settings, Users } from "lucide-react";
+import { FileText, Home, Settings, Users, type LucideIcon } from "lucide-react";
 
-export interface NavigationItem {
-  name: string;
-  href?: string;
-  icon: any;
-  subItems?: {
-    name: string;
-    href: string;
+export interface NavItem {
+  title: string;
+  url?: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
+  items?: {
+    title: string;
+    url: string;
   }[];
 }
 
-export const navigationItems: NavigationItem[] = [
+export const navItems: NavItem[] = [
   {
-    name: "대시보드",
-    href: "/dashboard",
+    title: "대시보드",
+    url: "/dashboard",
     icon: Home
   },
   {
-    name: "회원 관리",
+    title: "회원 관리",
     icon: Users,
-    subItems: [
+    items: [
       {
-        name: "회원 목록",
-        href: "/members/list"
+        title: "회원 목록",
+        url: "/members/list"
       },
       {
-        name: "회원 등록",
-        href: "/members/register"
+        title: "회원 등록",
+        url: "/members/register"
       }
     ]
   },
   {
-    name: "문서 관리",
+    title: "문서 관리",
     icon: FileText,
-    subItems: [
+    items: [
       {
-        name: "문서 목록",
-        href: "/documents/list"
+        title: "문서 목록",
+        url: "/documents/list"
       },
       {
-        name: "문서 작성",
-        href: "/documents/create"
+        title: "문서 작성",
+        url: "/documents/create"
       }
     ]
   },
   {
-    name: "설정",
-    href: "/settings",
+    title: "설정",
+    url: "/settings",
     icon: Settings
   }
 ];
