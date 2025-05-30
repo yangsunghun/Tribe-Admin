@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Image from "next/image";
 import { useState } from "react";
 
 interface MeetingItem {
@@ -83,7 +84,7 @@ const MemberMeetingsTab = ({ meetings, meetingDetail }: MemberMeetingsTabProps) 
               <TableCell>{item.meetingName}</TableCell>
               <TableCell>{item.display}</TableCell>
               <TableCell>
-                <img src={item.thumbnail} alt="thumb" className="h-10 w-10 rounded" />
+                <Image width={50} height={50} src={item.thumbnail} alt="thumb" className="h-10 w-10 rounded" />
               </TableCell>
               <TableCell>{item.participants}</TableCell>
               <TableCell>{item.status}</TableCell>
@@ -103,7 +104,13 @@ const MemberMeetingsTab = ({ meetings, meetingDetail }: MemberMeetingsTabProps) 
           {selectedMeeting && (
             <div className="space-y-2">
               <div className="flex items-center gap-4">
-                <img src={selectedMeeting.thumbnail} alt="thumb" className="h-16 w-16 rounded" />
+                <Image
+                  width={50}
+                  height={50}
+                  src={selectedMeeting.thumbnail}
+                  alt="thumb"
+                  className="h-16 w-16 rounded"
+                />
                 <div>
                   <div className="text-lg font-bold">{selectedMeeting.meetingName}</div>
                   <div className="text-sm text-gray-500">모임번호: {selectedMeeting.meetingId}</div>

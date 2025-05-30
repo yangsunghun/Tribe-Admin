@@ -67,7 +67,7 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
   });
 
   return (
-    <div className="text-caption">
+    <>
       <div className="flex items-center py-4">
         <Input
           placeholder="이름 또는 이메일 검색"
@@ -225,6 +225,6 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

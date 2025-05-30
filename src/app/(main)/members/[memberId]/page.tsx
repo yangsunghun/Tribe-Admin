@@ -15,8 +15,7 @@ const MemberDetailPage = ({ params }: MemberDetailPageProps) => {
     return <div className="p-6 text-red-500">존재하지 않는 회원입니다.</div>;
   }
   return (
-    <div className="mx-auto p-6">
-      <h1 className="mb-4 text-2xl font-bold">회원 상세 정보</h1>
+    <>
       <Tabs defaultValue="info" className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="info">회원정보</TabsTrigger>
@@ -33,7 +32,7 @@ const MemberDetailPage = ({ params }: MemberDetailPageProps) => {
           <MemberMeetingsTab meetings={meetings} meetingDetail={meetingDetail} />
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   );
 };
 

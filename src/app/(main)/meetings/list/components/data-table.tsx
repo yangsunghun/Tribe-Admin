@@ -49,11 +49,12 @@ export function MeetingDataTable<TData, TValue>({ columns, data }: MeetingDataTa
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-      const { name, email } = row.original as any;
+      const { registrant, editor, title } = row.original as any;
       if (!filterValue) return true;
       return (
-        (name && name.toLowerCase().includes(filterValue.toLowerCase())) ||
-        (email && email.toLowerCase().includes(filterValue.toLowerCase()))
+        (registrant && registrant.toLowerCase().includes(filterValue.toLowerCase())) ||
+        (editor && editor.toLowerCase().includes(filterValue.toLowerCase())) ||
+        (title && title.toLowerCase().includes(filterValue.toLowerCase()))
       );
     },
     state: {
@@ -67,10 +68,10 @@ export function MeetingDataTable<TData, TValue>({ columns, data }: MeetingDataTa
   });
 
   return (
-    <div className="text-caption">
+    <>
       <div className="flex items-center py-4">
         <Input
-          placeholder="이름 또는 이메일 검색"
+          placeholder="등록자, 수정자, 모임명 검색"
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-sm"
@@ -225,6 +226,6 @@ export function MeetingDataTable<TData, TValue>({ columns, data }: MeetingDataTa
           </Button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import { User } from "@/mocks/users";
+import Image from "next/image";
 
 interface MemberInfoTabProps {
   user: User;
@@ -8,10 +9,10 @@ const MemberInfoTab = ({ user }: MemberInfoTabProps) => (
   <table className="min-w-full rounded-lg border border-gray-200 bg-white">
     <tbody>
       <tr>
-        <td className="bg-gray-50 px-4 py-2 font-semibold">프로필</td>
+        <td className="bg-gray-50 px-4 py-2 font-semibold">프로필 이미지</td>
         <td className="px-4 py-2">
           {user.profile_img ? (
-            <img src={user.profile_img} alt={user.name} className="h-16 w-16 rounded-full" />
+            <Image src={user.profile_img} alt={user.name} width={100} height={100} />
           ) : (
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-200 text-gray-400">
               <span className="text-2xl">?</span>

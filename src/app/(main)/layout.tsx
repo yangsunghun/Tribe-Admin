@@ -17,7 +17,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
-      <main className="bg-bg-light max-w-screen overflow-hidden pt-16">
+      <main className="bg-bg-light text-caption max-w-screen overflow-hidden pt-16">
         <SidebarProvider>
           <AppSidebar />
           <section className="w-full p-4">

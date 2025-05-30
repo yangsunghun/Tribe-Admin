@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User } from "@/mocks/users";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, UserRound } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
@@ -56,10 +57,10 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return user.profile_img ? (
-        <img src={user.profile_img} alt={user.name} className="mx-auto h-10 w-10 rounded-full" />
+        <Image width={32} height={32} src={user.profile_img} alt={user.name} className="mx-auto rounded-full" />
       ) : (
-        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-400">
-          <span className="text-lg">?</span>
+        <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+          <UserRound size={16} />
         </div>
       );
     }
@@ -246,7 +247,7 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => {
       return (
-        <Badge className="text-caption" variant={row.original.marketing_agreed ? "success" : "secondary"}>
+        <Badge className="text-small" variant={row.original.marketing_agreed ? "success" : "secondary"}>
           {row.original.marketing_agreed ? "동의" : "미동의"}
         </Badge>
       );

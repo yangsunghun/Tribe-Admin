@@ -1,6 +1,16 @@
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Group } from "@/mocks/groups";
 import { ColumnDef } from "@tanstack/react-table";
+import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useMemo } from "react";
 
 export const columns: ColumnDef<Group>[] = [
   {
@@ -13,7 +23,7 @@ export const columns: ColumnDef<Group>[] = [
     accessorKey: "group_id",
     header: "모임번호",
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="text-blue-600 underline">
+      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
         {row.original.group_id}
       </Link>
     ),
@@ -23,7 +33,7 @@ export const columns: ColumnDef<Group>[] = [
     accessorKey: "title",
     header: "모임명",
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="text-blue-600 underline">
+      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
         {row.original.title}
       </Link>
     ),
@@ -31,15 +41,53 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "display",
-    header: "전시여부",
+    header: ({ column }) => {
+      const options = ["Y", "N"];
+      const currentFilter = column.getFilterValue() as string | undefined;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              전시여부
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => column.setFilterValue(undefined)}
+              className={!currentFilter ? "font-bold" : ""}
+            >
+              전체
+            </DropdownMenuItem>
+            {options.map((opt) => (
+              <DropdownMenuItem
+                key={opt}
+                onClick={() => column.setFilterValue(opt)}
+                className={currentFilter === opt ? "font-bold" : ""}
+              >
+                {opt === "Y" ? "전시" : "비전시"}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
     cell: ({ row }) => (row.original.display === "Y" ? "전시" : "비전시"),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      return row.original.display === filterValue;
+    },
     enableSorting: false
   },
   {
     accessorKey: "thumbnail",
     header: "썸네일 이미지",
     cell: ({ row }) =>
-      row.original.thumbnail ? <img src={row.original.thumbnail} alt="thumb" className="h-10 w-10 rounded" /> : "-",
+      row.original.thumbnail ? (
+        <Image src={row.original.thumbnail} width={30} height={30} alt="thumb" className="rounded" />
+      ) : (
+        "-"
+      ),
     enableSorting: false
   },
   {
@@ -50,7 +98,45 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "status",
-    header: "진행상태",
+    header: ({ column, table }) => {
+      // 진행상태 목록 추출
+      const statuses = useMemo(() => {
+        const all = table.getPreFilteredRowModel().rows.map((row) => row.original.status);
+        return Array.from(new Set(all));
+      }, [table]);
+      const currentFilter = column.getFilterValue() as string | undefined;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              진행상태
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => column.setFilterValue(undefined)}
+              className={!currentFilter ? "font-bold" : ""}
+            >
+              전체
+            </DropdownMenuItem>
+            {statuses.map((status) => (
+              <DropdownMenuItem
+                key={status}
+                onClick={() => column.setFilterValue(status)}
+                className={currentFilter === status ? "font-bold" : ""}
+              >
+                {status}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      return row.original.status === filterValue;
+    },
     enableSorting: false
   },
   {
