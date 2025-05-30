@@ -1,10 +1,10 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { User } from "@/mocks/users";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "../badge";
-import { Button } from "../button";
-import { Checkbox } from "../checkbox";
 
 const calculateAgeGroup = (birthDate: string): string => {
   const today = new Date();
@@ -59,19 +59,19 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "nickname",
-    header: "닉네임",
+    header: "닉네임"
+  },
+  {
+    accessorKey: "name",
+    header: "이름",
     cell: ({ row }) => {
       const user = row.original;
       return (
         <Link href={`/members/${user.user_id}`} className="font-semibold hover:underline">
-          {user.nickname || "-"}
+          {user.name || "-"}
         </Link>
       );
     }
-  },
-  {
-    accessorKey: "name",
-    header: "이름"
   },
   {
     accessorKey: "email",
