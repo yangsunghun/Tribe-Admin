@@ -1,12 +1,28 @@
 "use client";
 
-import { navMainItems } from "@/config/navMainItems";
+import { getDynamicRouteInfo, navMainItems } from "@/config/navMainItems";
 import { House } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "../ui/breadcrumb";
 
 export function getBreadcrumbItems(pathname: string) {
+  // 동적 라우트 체크
+  const dynamicRouteInfo = getDynamicRouteInfo(pathname);
+  if (dynamicRouteInfo) {
+    const parentItem = navMainItems.find((item) => item.title === dynamicRouteInfo.parent);
+    if (parentItem) {
+      return [
+        parentItem,
+        {
+          title: dynamicRouteInfo.title,
+          url: pathname
+        }
+      ];
+    }
+  }
+
+  // 정적 라우트 체크
   for (const item of navMainItems) {
     if (item.url && item.url === pathname) {
       return [item];
@@ -28,7 +44,7 @@ const PageDirectory = () => {
 
   return (
     <div className="flex items-center justify-between rounded-md bg-white px-6 py-4">
-      <h2 className="text-subtitle font-semibold">{items[items.length - 1].title}</h2>
+      <h2 className="text-subtitle font-semibold">{items[items.length - 1]?.title}</h2>
       <Breadcrumb className="text-body">
         <BreadcrumbList>
           <BreadcrumbItem>
