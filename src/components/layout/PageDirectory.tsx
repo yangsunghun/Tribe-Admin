@@ -27,27 +27,30 @@ const PageDirectory = () => {
   const items = getBreadcrumbItems(pathname);
 
   return (
-    <Breadcrumb className="text-body">
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">
-            <House size={16} />
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        {items.map((item, idx) => (
-          <Fragment key={item.url || item.title}>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              {item.url && idx !== items.length - 1 ? (
-                <BreadcrumbLink href={item.url}>{item.title}</BreadcrumbLink>
-              ) : (
-                <span>{item.title}</span>
-              )}
-            </BreadcrumbItem>
-          </Fragment>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <div className="flex items-center justify-between rounded-md bg-white px-6 py-4">
+      <h2 className="text-subtitle font-semibold">{items[items.length - 1].title}</h2>
+      <Breadcrumb className="text-body">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">
+              <House size={16} />
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          {items.map((item, idx) => (
+            <Fragment key={item.url || item.title}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {item.url && idx !== items.length - 1 ? (
+                  <BreadcrumbLink href={item.url}>{item.title}</BreadcrumbLink>
+                ) : (
+                  <span>{item.title}</span>
+                )}
+              </BreadcrumbItem>
+            </Fragment>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
   );
 };
 

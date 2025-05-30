@@ -21,10 +21,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
         <SidebarProvider>
           <AppSidebar />
           <section className="w-full p-4">
-            <div className="flex justify-between rounded-md bg-white px-6 py-4">
-              <h2 className="text-title font-semibold">Dashboard</h2>
-              <PageDirectory />
-            </div>
+            <PageDirectory />
             <div className="mt-4 rounded-md bg-white px-6 py-4">{children}</div>
           </section>
         </SidebarProvider>
