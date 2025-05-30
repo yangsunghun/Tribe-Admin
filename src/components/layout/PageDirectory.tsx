@@ -44,12 +44,12 @@ const PageDirectory = () => {
 
   return (
     <div className="flex items-center justify-between rounded-md bg-white px-6 py-4">
-      <h2 className="text-subtitle font-semibold">{items[items.length - 1]?.title}</h2>
-      <Breadcrumb className="text-body">
+      <h2 className="text-subtitle text-primary-700 font-bold">{items[items.length - 1]?.title}</h2>
+      <Breadcrumb className="text-caption">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
-              <House size={16} />
+              <House size={14} />
             </BreadcrumbLink>
           </BreadcrumbItem>
           {items.map((item, idx) => (
