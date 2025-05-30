@@ -57,7 +57,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return user.profile_img ? (
-        <Image width={32} height={32} src={user.profile_img} alt={user.name} className="mx-auto rounded-full" />
+        <Image width={32} height={32} src={user.profile_img} alt={user.name} className="inline-block rounded-full" />
       ) : (
         <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400">
           <UserRound size={16} />

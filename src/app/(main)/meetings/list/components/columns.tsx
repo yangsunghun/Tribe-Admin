@@ -84,7 +84,7 @@ export const columns: ColumnDef<Group>[] = [
     header: "썸네일 이미지",
     cell: ({ row }) =>
       row.original.thumbnail ? (
-        <Image src={row.original.thumbnail} width={30} height={30} alt="thumb" className="rounded" />
+        <Image src={row.original.thumbnail} width={32} height={32} alt="thumb" className="inline-block rounded" />
       ) : (
         "-"
       ),
