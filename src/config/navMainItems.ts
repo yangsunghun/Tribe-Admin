@@ -1,4 +1,4 @@
-import { FileText, Home, Settings, Users, type LucideIcon } from "lucide-react";
+import { FileText, MessagesSquare, Settings, Users, type LucideIcon } from "lucide-react";
 
 export interface NavMainItem {
   title: string;
@@ -31,21 +31,25 @@ export const getDynamicRouteInfo = (pathname: string) => {
 
 export const navMainItems: NavMainItem[] = [
   {
-    title: "대시보드",
-    url: "/dashboard",
-    icon: Home
+    title: "회원 관리",
+    url: "/members/list",
+    icon: Users
   },
   {
-    title: "회원 관리",
-    icon: Users,
+    title: "모임 관리",
+    icon: MessagesSquare,
     items: [
       {
-        title: "회원 목록",
-        url: "/members/list"
+        title: "모임 관리",
+        url: "/meetings/list"
       },
       {
-        title: "회원 등록",
-        url: "/members/register"
+        title: "피드 관리",
+        url: "/feeds/list"
+      },
+      {
+        title: "신고 관리",
+        url: "/reports/list"
       }
     ]
   },
