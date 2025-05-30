@@ -1,5 +1,4 @@
 import AppSidebar from "@/components/layout/AppSidebar";
-import Header from "@/components/layout/Header";
 import PageDirectory from "@/components/layout/PageDirectory";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { authOptions } from "@/lib/auth";
@@ -16,8 +15,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header />
-      <main className="bg-bg-light text-caption max-w-screen overflow-hidden pt-16">
+      <main className="bg-bg-light text-caption max-w-screen overflow-hidden">
         <SidebarProvider>
           <AppSidebar />
           <section className="w-full p-4">

@@ -1,8 +1,11 @@
 "use client";
 
+import LogoImage from "@/assets/images/logo.svg";
 import { navBottomItems } from "@/config/navBottomItems";
 import { navMainItems } from "@/config/navMainItems";
 import clsx from "clsx";
+import Image from "next/image";
+import Link from "next/link";
 import { Sidebar, SidebarContent, SidebarTrigger, useSidebar } from "../ui/sidebar";
 import NavBottom from "./NavBottom";
 import NavMain from "./NavMain";
@@ -11,7 +14,12 @@ const AppSidebar = () => {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" className="pt-16">
+    <Sidebar collapsible="icon">
+      <h1 className={clsx("w-full bg-white p-4", state === "collapsed" ? "" : "")}>
+        <Link href="/">
+          <Image src={LogoImage} alt="Tribe" width={100} height={100} className="pt-5" />
+        </Link>
+      </h1>
       <SidebarContent className={clsx("bg-white", state === "collapsed" ? "pt-10" : "pt-0")}>
         <SidebarTrigger
           className={clsx(
