@@ -14,8 +14,8 @@ export interface NavMainItem {
 
 // 동적 라우트 패턴 매칭을 위한 함수
 export const getDynamicRouteInfo = (pathname: string) => {
-  // 회원 상세 페이지 패턴
-  const memberDetailPattern = /^\/members\/([^/]+)$/;
+  // 회원 상세 페이지 패턴 (list, register 등은 제외)
+  const memberDetailPattern = /^\/members\/(?!list$|register$)[A-Za-z0-9_-]+$/;
   const memberDetailMatch = pathname.match(memberDetailPattern);
 
   if (memberDetailMatch) {
@@ -32,7 +32,7 @@ export const getDynamicRouteInfo = (pathname: string) => {
 export const navMainItems: NavMainItem[] = [
   {
     title: "대시보드",
-    url: "/",
+    url: "/dashboard",
     icon: Home
   },
   {

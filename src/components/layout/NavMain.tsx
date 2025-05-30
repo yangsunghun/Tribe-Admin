@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -20,9 +21,10 @@ import {
 
 interface NavMainProps {
   items: NavMainItem[];
+  isCollapsed: boolean;
 }
 
-const NavMain = ({ items }: NavMainProps) => {
+const NavMain = ({ items, isCollapsed }: NavMainProps) => {
   const pathname = usePathname();
 
   const isSubMenuActive = (subItems: { url: string }[] | undefined) => {
@@ -45,47 +47,78 @@ const NavMain = ({ items }: NavMainProps) => {
           {items.map((item: NavMainItem) => (
             <Collapsible key={item.title} asChild defaultOpen={item.isActive} className="group/collapsible">
               {item.items ? (
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      className={clsx(
-                        "flex h-12 w-full px-4 whitespace-nowrap",
-                        "hover:!text-primary-700 hover:!bg-primary-50 active:text-primary-800 transition-background transition-colors",
-                        isSubMenuActive(item.items) && "text-primary-700 bg-primary-50 font-semibold",
-                        "data-[state=collapsed]:justify-center data-[state=collapsed]:px-0"
-                      )}
-                      tooltip={item.title}
+                isCollapsed ? (
+                  <SidebarMenuItem>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <SidebarMenuButton className="flex h-12 w-full justify-center px-4" tooltip={item.title}>
+                          {item.icon && <item.icon />}
+                        </SidebarMenuButton>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" side="right" className="w-40 p-0">
+                        <SidebarMenuSub className="border-none px-0 py-2">
+                          {item.items.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild>
+                                <Link
+                                  className={clsx(
+                                    "block px-4 py-2",
+                                    pathname === subItem.url ? "text-primary-700 font-semibold" : "text-primary-800"
+                                  )}
+                                  href={subItem.url}
+                                >
+                                  {subItem.title}
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </PopoverContent>
+                    </Popover>
+                  </SidebarMenuItem>
+                ) : (
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        className={clsx(
+                          "flex h-12 w-full px-4 whitespace-nowrap",
+                          "hover:!text-primary-700 hover:!bg-primary-50 active:text-primary-800 transition-background transition-colors",
+                          isSubMenuActive(item.items) && "text-primary-700 bg-primary-50 font-semibold",
+                          "data-[state=collapsed]:justify-center data-[state=collapsed]:px-0"
+                        )}
+                        tooltip={item.title}
+                      >
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent
+                      className={clsx("data-[state=collapsed]:hidden", "transition-all duration-200 ease-in-out")}
                     >
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent
-                    className={clsx("data-[state=collapsed]:hidden", "transition-all duration-200 ease-in-out")}
-                  >
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem: { title: string; url: string }) => (
-                        <SidebarMenuSubItem
-                          className={clsx("rounded-md px-4 py-1", "hover:!text-primary-700 hover:!bg-primary-50")}
-                          key={subItem.title}
-                        >
-                          <SidebarMenuSubButton asChild>
-                            <Link
-                              className={clsx(
-                                "block !bg-transparent",
-                                pathname === subItem.url ? "!text-primary-700 font-semibold" : "text-primary-800"
-                              )}
-                              href={subItem.url}
-                            >
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
+                      <SidebarMenuSub>
+                        {item.items?.map((subItem: { title: string; url: string }) => (
+                          <SidebarMenuSubItem
+                            className={clsx("rounded-md px-4 py-1", "hover:!text-primary-700 hover:!bg-primary-50")}
+                            key={subItem.title}
+                          >
+                            <SidebarMenuSubButton asChild>
+                              <Link
+                                className={clsx(
+                                  "block !bg-transparent",
+                                  pathname === subItem.url ? "!text-primary-700 font-semibold" : "text-primary-800"
+                                )}
+                                href={subItem.url}
+                              >
+                                <span>{subItem.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                )
               ) : (
                 <SidebarMenuButton
                   className={clsx(

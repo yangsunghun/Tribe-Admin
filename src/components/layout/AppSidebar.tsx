@@ -20,7 +20,7 @@ const AppSidebar = () => {
             state === "collapsed" ? "top-18 right-1/2 translate-x-1/2 transform" : "top-18 right-4"
           )}
         />
-        <NavMain items={navMainItems} />
+        <NavMain items={navMainItems} isCollapsed={state === "collapsed"} />
         <NavBottom items={navBottomItems} />
       </SidebarContent>
     </Sidebar>
