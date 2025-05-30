@@ -1,10 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { User } from "@/mocks/users";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useMemo } from "react";
 
 const calculateAgeGroup = (birthDate: string): string => {
   const today = new Date();
@@ -75,45 +82,175 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
-    header: ({ column }) => {
+    header: ({ column, table }) => {
+      // 테이블 데이터에서 도메인 목록 추출
+      const domains = useMemo(() => {
+        const emails = table.getPreFilteredRowModel().rows.map((row) => row.original.email);
+        const uniqueDomains = Array.from(new Set(emails.map((email) => email.split("@")[1])));
+        return uniqueDomains;
+      }, [table]);
+      const currentFilter = column.getFilterValue() as string | undefined;
+
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          이메일
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              이메일
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => column.setFilterValue(undefined)}
+              className={!currentFilter ? "font-bold" : ""}
+            >
+              전체
+            </DropdownMenuItem>
+            {domains.map((domain) => (
+              <DropdownMenuItem
+                key={domain}
+                onClick={() => column.setFilterValue(domain)}
+                className={currentFilter === domain ? "font-bold" : ""}
+              >
+                {domain}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
-    }
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      const email = row.getValue(columnId) as string;
+      return email.endsWith("@" + filterValue);
+    },
+    enableSorting: false // 정렬은 비활성화
   },
   {
     accessorKey: "gender",
-    header: "성별",
+    header: ({ column, table }) => {
+      const genders = ["남", "여"];
+      const currentFilter = column.getFilterValue() as string | undefined;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              성별
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => column.setFilterValue(undefined)}
+              className={!currentFilter ? "font-bold" : ""}
+            >
+              전체
+            </DropdownMenuItem>
+            {genders.map((gender) => (
+              <DropdownMenuItem
+                key={gender}
+                onClick={() => column.setFilterValue(gender)}
+                className={currentFilter === gender ? "font-bold" : ""}
+              >
+                {gender}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
     cell: ({ row }) => {
       return row.original.gender === "MALE" ? "남" : "여";
-    }
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      const gender = row.original.gender === "MALE" ? "남" : "여";
+      return gender === filterValue;
+    },
+    enableSorting: false
   },
   {
     accessorKey: "birth_date",
-    header: "생년월일",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          생년월일
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return row.original.birth_date?.slice(0, 10) || "-";
-    }
+    },
+    enableSorting: true
   },
   {
     accessorKey: "age_group",
-    header: "연령대",
-    cell: ({ row }) => {
-      return calculateAgeGroup(row.original.birth_date);
+    header: ({ column, table }) => {
+      // 테이블 데이터에서 연령대 목록 추출
+      const ageGroups = useMemo(() => {
+        const ages = table.getPreFilteredRowModel().rows.map((row) => calculateAgeGroup(row.original.birth_date));
+        return Array.from(new Set(ages));
+      }, [table]);
+      const currentFilter = column.getFilterValue() as string | undefined;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              연령대
+              <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => column.setFilterValue(undefined)}
+              className={!currentFilter ? "font-bold" : ""}
+            >
+              전체
+            </DropdownMenuItem>
+            {ageGroups.map((ageGroup) => (
+              <DropdownMenuItem
+                key={ageGroup}
+                onClick={() => column.setFilterValue(ageGroup)}
+                className={currentFilter === ageGroup ? "font-bold" : ""}
+              >
+                {ageGroup}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+    cell: ({ row }) => calculateAgeGroup(row.original.birth_date),
+    enableSorting: true,
+    sortingFn: (rowA, rowB) => {
+      const ageA = parseInt(calculateAgeGroup(rowA.original.birth_date));
+      const ageB = parseInt(calculateAgeGroup(rowB.original.birth_date));
+      return ageA - ageB;
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      return calculateAgeGroup(row.original.birth_date) === filterValue;
     }
   },
   {
     accessorKey: "marketing_agreed",
-    header: "마케팅 활용동의",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          마케팅 활용동의
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return (
         <Badge className="text-caption" variant={row.original.marketing_agreed ? "success" : "secondary"}>
           {row.original.marketing_agreed ? "동의" : "미동의"}
         </Badge>
       );
-    }
+    },
+    enableSorting: true
   }
 ];

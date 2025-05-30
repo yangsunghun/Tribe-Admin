@@ -35,6 +35,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     data,
@@ -47,21 +48,31 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    globalFilterFn: (row, columnId, filterValue) => {
+      const { name, email } = row.original as any;
+      if (!filterValue) return true;
+      return (
+        (name && name.toLowerCase().includes(filterValue.toLowerCase())) ||
+        (email && email.toLowerCase().includes(filterValue.toLowerCase()))
+      );
+    },
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
-    }
+      rowSelection,
+      globalFilter
+    },
+    onGlobalFilterChange: setGlobalFilter
   });
 
   return (
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="검색"
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          placeholder="이름 또는 이메일 검색"
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>

@@ -89,6 +89,8 @@ const profileImgs = [
   "https://randomuser.me/api/portraits/women/5.jpg"
 ];
 
+const emailDomains = ["naver.com", "gmail.com", "hanmail.net", "nate.com", "hanmir.com", "yahoo.co.kr"];
+
 export const mockUsers: User[] = Array.from({ length: 100 }).map((_, i) => {
   const name = names[i % names.length];
   const gender = i % 2 === 0 ? "MALE" : "FEMALE";
@@ -97,11 +99,12 @@ export const mockUsers: User[] = Array.from({ length: 100 }).map((_, i) => {
   const birth = randomDate(new Date(1980, 0, 1), new Date(2005, 11, 31));
   const created = randomDate(new Date(2022, 0, 1), new Date());
   const profile_img = profileImgs[i % profileImgs.length];
+  const emailDomain = emailDomains[i % emailDomains.length];
   return {
     user_id: `MOCKUSER${(i + 1).toString().padStart(4, "0")}`,
     name,
     join_type,
-    email: `user${i + 1}@example.com`,
+    email: `user${i + 1}@${emailDomain}`,
     password_hash: join_type === "DEFAULT" ? `hashedpassword${i + 1}` : null,
     nickname: name + (i + 1),
     gender,
