@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/className";
+import { cn } from "@/lib/utils";
 import type { SVGProps } from "react";
 
 type Props = SVGProps<SVGSVGElement> & {
