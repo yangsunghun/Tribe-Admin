@@ -1,5 +1,12 @@
+import { mockGroups } from "@/mocks/groups";
+import GroupTable from "./components/GroupTable";
+
 const MeetingsListPage = () => {
-  return <div>MeetingsListPage</div>;
+  return (
+    <>
+      <GroupTable groups={mockGroups} />
+    </>
+  );
 };
 
 export default MeetingsListPage;

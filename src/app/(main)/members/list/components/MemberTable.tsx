@@ -2,14 +2,14 @@
 
 import { User } from "@/mocks/users";
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { MemberDataTable } from "./data-table";
 
 interface MemberTableProps {
   users: User[];
 }
 
 const MemberTable = ({ users }: MemberTableProps) => {
-  return <DataTable columns={columns} data={users} />;
+  return <MemberDataTable columns={columns} data={users} />;
 };
 
 export default MemberTable;

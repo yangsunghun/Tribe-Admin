@@ -25,12 +25,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-interface MemberDataTableProps<TData, TValue> {
+interface MeetingDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTableProps<TData, TValue>) {
+export function MeetingDataTable<TData, TValue>({ columns, data }: MeetingDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
