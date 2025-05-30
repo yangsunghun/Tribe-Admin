@@ -6,6 +6,23 @@ import { Badge } from "../badge";
 import { Button } from "../button";
 import { Checkbox } from "../checkbox";
 
+const calculateAgeGroup = (birthDate: string): string => {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  const age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+
+  // 생일이 지나지 않았으면 나이를 1살 줄임
+  let adjustedAge = age;
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    adjustedAge -= 1;
+  }
+
+  // 나이를 10으로 나눈 후 내림하여 연령대를 계산
+  const ageGroup = Math.floor(adjustedAge / 10) * 10;
+  return `${ageGroup}대`;
+};
+
 export const columns: ColumnDef<User>[] = [
   {
     id: "select",
@@ -28,7 +45,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "profile_img",
-    header: "프로필",
+    header: "프로필 사진",
     cell: ({ row }) => {
       const user = row.original;
       return user.profile_img ? (
@@ -41,16 +58,20 @@ export const columns: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: "name",
-    header: "이름",
+    accessorKey: "nickname",
+    header: "닉네임",
     cell: ({ row }) => {
       const user = row.original;
       return (
         <Link href={`/members/${user.user_id}`} className="font-semibold hover:underline">
-          {user.name}
+          {user.nickname || "-"}
         </Link>
       );
     }
+  },
+  {
+    accessorKey: "name",
+    header: "이름"
   },
   {
     accessorKey: "email",
@@ -64,10 +85,6 @@ export const columns: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: "join_type",
-    header: "가입유형"
-  },
-  {
     accessorKey: "gender",
     header: "성별",
     cell: ({ row }) => {
@@ -75,20 +92,28 @@ export const columns: ColumnDef<User>[] = [
     }
   },
   {
-    accessorKey: "status",
-    header: "상태",
+    accessorKey: "birth_date",
+    header: "생년월일",
     cell: ({ row }) => {
-      const status = row.original.status;
-      return (
-        <Badge variant={status === "ACTIVE" ? "success" : "secondary"}>{status === "ACTIVE" ? "활성" : "비활성"}</Badge>
-      );
+      return row.original.birth_date?.slice(0, 10) || "-";
     }
   },
   {
-    accessorKey: "created_at",
-    header: "가입일",
+    accessorKey: "age_group",
+    header: "연령대",
     cell: ({ row }) => {
-      return row.original.created_at.slice(0, 10);
+      return calculateAgeGroup(row.original.birth_date);
+    }
+  },
+  {
+    accessorKey: "marketing_agreed",
+    header: "마케팅 활용동의",
+    cell: ({ row }) => {
+      return (
+        <Badge className="text-caption" variant={row.original.marketing_agreed ? "success" : "secondary"}>
+          {row.original.marketing_agreed ? "동의" : "미동의"}
+        </Badge>
+      );
     }
   }
 ];
