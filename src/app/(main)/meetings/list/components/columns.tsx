@@ -41,16 +41,8 @@ export const columns: ExtendedColumnDef<Group>[] = [
   {
     accessorKey: "no",
     id: "번호",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          번호
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "번호",
     cell: ({ row }) => row.index + 1,
-    enableSorting: false,
     enableSearch: false
   },
   {
@@ -68,14 +60,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
   {
     accessorKey: "title",
     id: "모임명",
-    header: ({ column }) => {
-      return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          모임명
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: "모임명",
     cell: ({ row }) => (
       <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
         {row.original.title}
