@@ -135,7 +135,12 @@ export const columns: ExtendedColumnDef<User>[] = [
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue) return true;
       const email = row.getValue(columnId) as string;
-      return email.endsWith("@" + filterValue);
+      // 도메인 필터링인 경우
+      if (filterValue.includes("@")) {
+        return email.endsWith("@" + filterValue);
+      }
+      // 일반 텍스트 검색인 경우
+      return email.toLowerCase().includes(filterValue.toLowerCase());
     },
     enableSorting: false,
     enableSearch: true

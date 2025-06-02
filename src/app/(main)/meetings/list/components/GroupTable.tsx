@@ -61,11 +61,14 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     if (selectedColumn) {
       setColumnFilters((prev) => {
         const column = columnMap[selectedColumn];
-        if (!column || !column.id) return prev;
+        if (!column) return prev;
+        // id가 없으면 accessorKey를 사용
+        const columnId = column.id || (column as any).accessorKey;
+
         return [
-          ...prev.filter((filter) => filter.id !== column.id),
+          ...prev.filter((filter) => filter.id !== columnId),
           {
-            id: column.id,
+            id: columnId,
             value
           }
         ];
