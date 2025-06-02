@@ -55,7 +55,6 @@ export function DataTable<TData>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: (filters) => {
-      console.log("Column Filters Changed:", filters);
       setColumnFilters(filters);
     },
     getFilteredRowModel: getFilteredRowModel(),
@@ -64,7 +63,6 @@ export function DataTable<TData>({
 
     filterFns: {
       dateRange: (row, columnId, filterValue: any) => {
-        console.log("Date Range Filter:", { columnId, filterValue });
         const date = row.getValue(columnId) as string;
         if (!date || !filterValue?.from) return true;
 
@@ -81,12 +79,7 @@ export function DataTable<TData>({
         }
 
         const isInRange = compareDate >= startDate && (!endDate || compareDate <= endDate);
-        console.log("Date Comparison:", {
-          compareDate,
-          startDate,
-          endDate,
-          isInRange
-        });
+
         return isInRange;
       }
     },

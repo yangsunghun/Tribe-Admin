@@ -46,7 +46,6 @@ const MemberTable = ({ users }: MemberTableProps) => {
         if (!column) return prev;
         // id가 없으면 accessorKey를 사용
         const columnId = column.id || (column as any).accessorKey;
-        console.log(value);
         return [
           ...prev.filter((filter) => filter.id !== columnId),
           {
@@ -66,7 +65,7 @@ const MemberTable = ({ users }: MemberTableProps) => {
   };
 
   return (
-    <div className="space-y-4 pt-4">
+    <div className="space-y-4">
       <div className="flex items-center gap-2">
         <TextFilter
           columns={columns}

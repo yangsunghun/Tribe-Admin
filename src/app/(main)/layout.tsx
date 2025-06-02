@@ -21,7 +21,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
           <section className="w-full p-4">
             <div className="min-h-[calc(100vh-2rem)] rounded-md bg-white px-6 py-4">
               <PageDirectory />
-              <div>{children}</div>
+              <div className="pt-4">{children}</div>
             </div>
           </section>
         </SidebarProvider>
