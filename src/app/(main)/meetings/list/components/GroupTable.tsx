@@ -22,10 +22,10 @@ const dateFilterOptions = [
 ];
 
 const dateFilterColumnMap = {
-  registrant: "registeredAt",
-  editor: "updated_at",
-  meetingStart: "created_at",
-  meetingEnd: "expired_at"
+  registrant: "등록일시",
+  editor: "수정일시",
+  meetingStart: "모임시작일",
+  meetingEnd: "모임종료일"
 } as const;
 
 const GroupTable = ({ groups }: GroupTableProps) => {
@@ -83,6 +83,45 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     setColumnFilters([]);
   };
 
+  const handleDateFilterChange = (value: DateFilterType) => {
+    console.log("Date Filter Changed:", value);
+    setSelectedDateFilter(value);
+    // 날짜 필터 변경 시 기존 날짜 필터 제거
+    setColumnFilters((prev) => {
+      const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+      console.log("Filters after removing date filters:", newFilters);
+      return newFilters;
+    });
+  };
+
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    console.log("Date Range Changed:", range);
+    setDateRange(range);
+    if (range?.from) {
+      setColumnFilters((prev) => {
+        // 기존 날짜 필터 제거
+        const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+        // 새로운 날짜 필터 추가
+        const columnId = dateFilterColumnMap[selectedDateFilter];
+        console.log("Selected Date Filter:", selectedDateFilter);
+        console.log("Column ID for filter:", columnId);
+        newFilters.push({
+          id: columnId,
+          value: range
+        });
+        console.log("New filters after adding date filter:", newFilters);
+        return newFilters;
+      });
+    } else {
+      // 날짜 범위가 없으면 날짜 필터 제거
+      setColumnFilters((prev) => {
+        const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+        console.log("Filters after clearing date range:", newFilters);
+        return newFilters;
+      });
+    }
+  };
+
   return (
     <div className="space-y-4 pt-4">
       <div className="flex items-start justify-between gap-2">
@@ -96,9 +135,9 @@ const GroupTable = ({ groups }: GroupTableProps) => {
           />
           <DateFilter
             selectedDateFilter={selectedDateFilter}
-            onDateFilterChange={setSelectedDateFilter}
+            onDateFilterChange={handleDateFilterChange}
             dateRange={dateRange}
-            onDateRangeChange={setDateRange}
+            onDateRangeChange={handleDateRangeChange}
             dateFilterOptions={dateFilterOptions}
           />
         </div>

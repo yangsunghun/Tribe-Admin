@@ -3,7 +3,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import type { DateRange } from "react-day-picker";
 
 export type DateFilterType = "registrant" | "editor" | "meetingStart" | "meetingEnd";
@@ -30,8 +30,13 @@ export function DateFilter({
     setIsOpen(false);
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    handleDateFilterChange(selectedDateFilter);
+  };
+
   return (
-    <div className="flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="flex items-center gap-2">
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="w-[150px] justify-between">
@@ -87,6 +92,6 @@ export function DateFilter({
           />
         </PopoverContent>
       </Popover>
-    </div>
+    </form>
   );
 }

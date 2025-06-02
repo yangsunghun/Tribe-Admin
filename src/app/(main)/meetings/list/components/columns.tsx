@@ -194,7 +194,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
   },
   {
     accessorKey: "created_at",
-    id: "모임 시작일",
+    id: "모임시작일",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -205,11 +205,28 @@ export const columns: ExtendedColumnDef<Group>[] = [
     },
     cell: ({ row }) => row.original.created_at.slice(0, 10),
     enableSorting: true,
-    enableSearch: false
+    enableSearch: false,
+    filterFn: (row, columnId, filterValue: any) => {
+      const date = row.getValue(columnId) as string;
+      if (!date || !filterValue?.from) return true;
+
+      const compareDate = new Date(date);
+      compareDate.setHours(0, 0, 0, 0);
+
+      const startDate = new Date(filterValue.from);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = filterValue.to ? new Date(filterValue.to) : null;
+      if (endDate) {
+        endDate.setHours(23, 59, 59, 999);
+      }
+
+      return compareDate >= startDate && (!endDate || compareDate <= endDate);
+    }
   },
   {
     accessorKey: "expired_at",
-    id: "모임 종료일",
+    id: "모임종료일",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -220,7 +237,24 @@ export const columns: ExtendedColumnDef<Group>[] = [
     },
     cell: ({ row }) => (row.original.expired_at ? row.original.expired_at.slice(0, 10) : "-"),
     enableSorting: true,
-    enableSearch: false
+    enableSearch: false,
+    filterFn: (row, columnId, filterValue: any) => {
+      const date = row.getValue(columnId) as string;
+      if (!date || !filterValue?.from) return true;
+
+      const compareDate = new Date(date);
+      compareDate.setHours(0, 0, 0, 0);
+
+      const startDate = new Date(filterValue.from);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = filterValue.to ? new Date(filterValue.to) : null;
+      if (endDate) {
+        endDate.setHours(23, 59, 59, 999);
+      }
+
+      return compareDate >= startDate && (!endDate || compareDate <= endDate);
+    }
   },
   {
     accessorKey: "registrant",
@@ -249,7 +283,24 @@ export const columns: ExtendedColumnDef<Group>[] = [
     },
     cell: ({ row }) => row.original.registeredAt.slice(0, 10),
     enableSorting: true,
-    enableSearch: false
+    enableSearch: false,
+    filterFn: (row, columnId, filterValue: any) => {
+      const date = row.getValue(columnId) as string;
+      if (!date || !filterValue?.from) return true;
+
+      const compareDate = new Date(date);
+      compareDate.setHours(0, 0, 0, 0);
+
+      const startDate = new Date(filterValue.from);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = filterValue.to ? new Date(filterValue.to) : null;
+      if (endDate) {
+        endDate.setHours(23, 59, 59, 999);
+      }
+
+      return compareDate >= startDate && (!endDate || compareDate <= endDate);
+    }
   },
   {
     accessorKey: "editor",
@@ -278,6 +329,23 @@ export const columns: ExtendedColumnDef<Group>[] = [
     },
     cell: ({ row }) => row.original.updated_at.slice(0, 10),
     enableSorting: true,
-    enableSearch: false
+    enableSearch: false,
+    filterFn: (row, columnId, filterValue: any) => {
+      const date = row.getValue(columnId) as string;
+      if (!date || !filterValue?.from) return true;
+
+      const compareDate = new Date(date);
+      compareDate.setHours(0, 0, 0, 0);
+
+      const startDate = new Date(filterValue.from);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = filterValue.to ? new Date(filterValue.to) : null;
+      if (endDate) {
+        endDate.setHours(23, 59, 59, 999);
+      }
+
+      return compareDate >= startDate && (!endDate || compareDate <= endDate);
+    }
   }
 ];
