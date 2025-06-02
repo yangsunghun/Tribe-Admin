@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Group } from "@/mocks/groups";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -141,13 +141,27 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "created_at",
-    header: "모임 시작일",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          모임 시작일
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => row.original.created_at.slice(0, 10),
     enableSorting: true
   },
   {
     accessorKey: "expired_at",
-    header: "모임 종료일",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          모임 종료일
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (row.original.expired_at ? row.original.expired_at.slice(0, 10) : "-"),
     enableSorting: true
   },
@@ -158,7 +172,14 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "registeredAt",
-    header: "등록일시",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          등록일시
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => row.original.registeredAt.slice(0, 10),
     enableSorting: true
   },
@@ -169,7 +190,14 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "updated_at",
-    header: "수정일시",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          수정일시
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => row.original.updated_at.slice(0, 10),
     enableSorting: true
   }
