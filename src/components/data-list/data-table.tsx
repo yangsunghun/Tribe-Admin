@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -9,33 +8,42 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
+  type ColumnDef,
   type ColumnFiltersState,
+  type OnChangeFn,
+  type Table,
   type VisibilityState
 } from "@tanstack/react-table";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as UITable } from "@/components/ui/table";
 import { useState } from "react";
 
-interface MemberDataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData> {
   data: TData[];
+  columns: ColumnDef<TData>[];
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: OnChangeFn<ColumnFiltersState>;
+  globalFilter: string;
+  setGlobalFilter: OnChangeFn<string>;
+  columnVisibility: VisibilityState;
+  setColumnVisibility: OnChangeFn<VisibilityState>;
+  renderToggleVisibility?: (table: Table<TData>) => React.ReactNode;
 }
 
-export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTableProps<TData, TValue>) {
+export function DataTable<TData>({
+  columns,
+  data,
+  columnFilters,
+  setColumnFilters,
+  globalFilter,
+  setGlobalFilter,
+  columnVisibility,
+  setColumnVisibility,
+  renderToggleVisibility
+}: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
-  const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
     data,
@@ -48,14 +56,29 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    globalFilterFn: (row, columnId, filterValue) => {
-      const { name, email } = row.original as any;
-      if (!filterValue) return true;
-      return (
-        (name && name.toLowerCase().includes(filterValue.toLowerCase())) ||
-        (email && email.toLowerCase().includes(filterValue.toLowerCase()))
-      );
+
+    filterFns: {
+      dateRange: (row, columnId, filterValue: any) => {
+        const date = row.getValue(columnId) as string;
+        if (!date || !filterValue?.from) return true;
+
+        // Convert ISO string to Date object
+        const compareDate = new Date(date);
+        compareDate.setHours(0, 0, 0, 0);
+
+        const startDate = new Date(filterValue.from);
+        startDate.setHours(0, 0, 0, 0);
+
+        const endDate = filterValue.to ? new Date(filterValue.to) : null;
+        if (endDate) {
+          endDate.setHours(23, 59, 59, 999);
+        }
+
+        const isInRange = compareDate >= startDate && (!endDate || compareDate <= endDate);
+        return isInRange;
+      }
     },
+
     state: {
       sorting,
       columnFilters,
@@ -68,40 +91,8 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
 
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="이름 또는 이메일 검색"
-          value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
       <div className="rounded-md border">
-        <Table>
+        <UITable>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -132,7 +123,7 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </UITable>
       </div>
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex items-center space-x-2">
@@ -152,6 +143,7 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
           </select>
         </div>
         <div className="flex items-center space-x-2">
+          {renderToggleVisibility?.(table)}
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
             페이지 {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
           </div>
@@ -173,20 +165,11 @@ export function MemberDataTable<TData, TValue>({ columns, data }: MemberDataTabl
           </Button>
           <div className="flex items-center gap-1">
             {Array.from({ length: table.getPageCount() }, (_, i) => i).map((pageIndex) => {
-              // 현재 페이지 주변의 페이지 번호만 표시
               const currentPage = table.getState().pagination.pageIndex;
               const totalPages = table.getPageCount();
-
-              // 항상 표시할 페이지 번호들
               const alwaysShow = [0, totalPages - 1];
-
-              // 현재 페이지 주변의 페이지 번호들
               const aroundCurrent = [currentPage - 1, currentPage, currentPage + 1];
-
-              // 표시할 페이지 번호인지 확인
               const shouldShow = alwaysShow.includes(pageIndex) || aroundCurrent.includes(pageIndex);
-
-              // 이전 페이지와 다음 페이지 사이에 ... 표시
               const showEllipsis = pageIndex === 1 || pageIndex === totalPages - 2;
 
               if (!shouldShow) {

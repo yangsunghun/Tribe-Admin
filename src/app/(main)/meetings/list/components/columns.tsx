@@ -15,12 +15,14 @@ import { useMemo } from "react";
 export const columns: ColumnDef<Group>[] = [
   {
     accessorKey: "no",
+    id: "번호",
     header: "번호",
     cell: ({ row }) => row.index + 1,
     enableSorting: false
   },
   {
     accessorKey: "group_id",
+    id: "모임번호",
     header: "모임번호",
     cell: ({ row }) => (
       <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
@@ -31,6 +33,7 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "title",
+    id: "모임명",
     header: "모임명",
     cell: ({ row }) => (
       <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
@@ -41,6 +44,7 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "display",
+    id: "전시여부",
     header: ({ column }) => {
       const options = ["Y", "N"];
       const currentFilter = column.getFilterValue() as string | undefined;
@@ -81,6 +85,7 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "thumbnail",
+    id: "썸네일 이미지",
     header: "썸네일 이미지",
     cell: ({ row }) =>
       row.original.thumbnail ? (
@@ -92,12 +97,14 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "participants",
+    id: "참여인원",
     header: "참여인원",
     cell: ({ row }) => `${row.original.participants}/${row.original.max_participants}`,
     enableSorting: false
   },
   {
     accessorKey: "status",
+    id: "진행상태",
     header: ({ column, table }) => {
       // 진행상태 목록 추출
       const statuses = useMemo(() => {
@@ -141,6 +148,7 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "created_at",
+    id: "모임 시작일",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -154,6 +162,7 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "expired_at",
+    id: "모임 종료일",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -167,11 +176,13 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "registrant",
+    id: "등록자",
     header: "등록자",
     enableSorting: false
   },
   {
     accessorKey: "registeredAt",
+    id: "등록일시",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -185,11 +196,13 @@ export const columns: ColumnDef<Group>[] = [
   },
   {
     accessorKey: "editor",
+    id: "수정자",
     header: "수정자",
     enableSorting: false
   },
   {
     accessorKey: "updated_at",
+    id: "수정일시",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>

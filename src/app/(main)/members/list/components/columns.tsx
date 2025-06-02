@@ -33,7 +33,7 @@ const calculateAgeGroup = (birthDate: string): string => {
 
 export const columns: ColumnDef<User>[] = [
   {
-    id: "select",
+    id: "선택",
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
@@ -53,6 +53,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "profile_img",
+    id: "프로필 사진",
     header: "프로필 사진",
     cell: ({ row }) => {
       const user = row.original;
@@ -67,10 +68,12 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "nickname",
+    id: "닉네임",
     header: "닉네임"
   },
   {
     accessorKey: "name",
+    id: "이름",
     header: "이름",
     cell: ({ row }) => {
       const user = row.original;
@@ -83,6 +86,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "email",
+    id: "이메일",
     header: ({ column, table }) => {
       // 테이블 데이터에서 도메인 목록 추출
       const domains = useMemo(() => {
@@ -129,6 +133,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "gender",
+    id: "성별",
     header: ({ column, table }) => {
       const genders = ["남", "여"];
       const currentFilter = column.getFilterValue() as string | undefined;
@@ -172,6 +177,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "birth_date",
+    id: "생년월일",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -187,6 +193,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "age_group",
+    id: "연령대",
     header: ({ column, table }) => {
       // 테이블 데이터에서 연령대 목록 추출
       const ageGroups = useMemo(() => {
@@ -237,6 +244,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "marketing_agreed",
+    id: "마케팅 활용동의",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>

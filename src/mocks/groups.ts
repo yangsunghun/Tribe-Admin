@@ -89,8 +89,8 @@ const places = ["서울 강남구", "부산 해운대구", "대구 수성구", "
 const challengeRules = ["매일 1회 인증", "주 3회 인증", "월 2회 인증"];
 
 export const mockGroups: Group[] = Array.from({ length: 100 }).map((_, i) => {
-  const start = randomDate(new Date(2024, 0, 1), new Date(2024, 5, 1));
-  const end = randomDate(new Date(2024, 5, 2), new Date(2024, 11, 31));
+  const start = randomDate(new Date(2025, 0, 1), new Date(2025, 5, 1));
+  const end = randomDate(new Date(2025, 5, 2), new Date(2025, 11, 31));
   const max_participants = 10 + (i % 20);
   return {
     group_id: `GROUP${(i + 1).toString().padStart(4, "0")}`,
