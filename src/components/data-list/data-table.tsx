@@ -54,18 +54,7 @@ export function DataTable<TData>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: (updaterOrValue: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)) => {
-      const filters = typeof updaterOrValue === "function" ? updaterOrValue([]) : updaterOrValue;
-      // Convert column filters to use accessorKey
-      const newFilters = filters.map((filter: { id: string; value: unknown }) => {
-        const column = columns.find((col) => (col as any).accessorKey === filter.id);
-        return {
-          ...filter,
-          id: column ? (column as any).accessorKey : filter.id
-        };
-      });
-      setColumnFilters(newFilters);
-    },
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,

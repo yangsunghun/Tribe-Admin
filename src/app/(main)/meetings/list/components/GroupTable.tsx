@@ -6,7 +6,7 @@ import { TextFilter } from "@/components/data-list/text-filter";
 import { ToggleVisibility } from "@/components/data-list/toggle-visibility";
 import { Group } from "@/mocks/groups";
 import type { ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { columns } from "./columns";
 
@@ -36,6 +36,19 @@ const GroupTable = ({ groups }: GroupTableProps) => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 
+  // 컬럼 매핑을 한 번만 생성
+  const columnMap = useMemo(() => {
+    return columns.reduce(
+      (acc, col) => {
+        if ((col as any).accessorKey) {
+          acc[(col as any).accessorKey] = col;
+        }
+        return acc;
+      },
+      {} as Record<string, (typeof columns)[0]>
+    );
+  }, []);
+
   const handleColumnVisibilityChange = (columnId: string, visible: boolean) => {
     setColumnVisibility((prev) => ({
       ...prev,
@@ -47,7 +60,7 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     setGlobalFilter(value);
     if (selectedColumn) {
       setColumnFilters((prev) => {
-        const column = columns.find((col) => (col as any).accessorKey === selectedColumn);
+        const column = columnMap[selectedColumn];
         if (!column || !column.id) return prev;
         return [
           ...prev.filter((filter) => filter.id !== column.id),
