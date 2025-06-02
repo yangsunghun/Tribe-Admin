@@ -20,14 +20,16 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as UITabl
 import { useState } from "react";
 
 interface DataTableProps<TData> {
-  data: TData[];
   columns: ColumnDef<TData>[];
+  data: TData[];
   columnFilters: ColumnFiltersState;
   setColumnFilters: OnChangeFn<ColumnFiltersState>;
   globalFilter: string;
   setGlobalFilter: OnChangeFn<string>;
   columnVisibility: VisibilityState;
   setColumnVisibility: OnChangeFn<VisibilityState>;
+  selectedColumn: string | null;
+  onSelectedColumnChange: (columnId: string | null) => void;
   renderToggleVisibility?: (table: Table<TData>) => React.ReactNode;
 }
 
@@ -52,7 +54,18 @@ export function DataTable<TData>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: (updaterOrValue: ColumnFiltersState | ((old: ColumnFiltersState) => ColumnFiltersState)) => {
+      const filters = typeof updaterOrValue === "function" ? updaterOrValue([]) : updaterOrValue;
+      // Convert column filters to use accessorKey
+      const newFilters = filters.map((filter: { id: string; value: unknown }) => {
+        const column = columns.find((col) => (col as any).accessorKey === filter.id);
+        return {
+          ...filter,
+          id: column ? (column as any).accessorKey : filter.id
+        };
+      });
+      setColumnFilters(newFilters);
+    },
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,

@@ -9,11 +9,18 @@ interface TextFilterProps<TData> {
   columns: (ColumnDef<TData> & { enableSearch?: boolean })[];
   globalFilter: string;
   onGlobalFilterChange: (value: string) => void;
+  selectedColumn: string | null;
+  onSelectedColumnChange: (columnId: string | null) => void;
 }
 
-export function TextFilter<TData>({ columns, globalFilter, onGlobalFilterChange }: TextFilterProps<TData>) {
+export function TextFilter<TData>({
+  columns,
+  globalFilter,
+  onGlobalFilterChange,
+  selectedColumn,
+  onSelectedColumnChange
+}: TextFilterProps<TData>) {
   const [inputValue, setInputValue] = useState(globalFilter);
-  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -27,12 +34,12 @@ export function TextFilter<TData>({ columns, globalFilter, onGlobalFilterChange 
 
   const columnOptions = columns
     .filter((column) => {
-      // header가 문자열이고, accessorKey가 있으며, search가 true인 컬럼만 필터링
+      // header가 문자열이고, accessorKey가 있으며, search가 true인 컬럼만 필터링..
       return (column as any).accessorKey && column.enableSearch !== false;
     })
     .map((column) => ({
       id: (column as any).accessorKey,
-      label: column.id as string
+      label: column.id
     }));
 
   const getPlaceholder = () => {
@@ -52,7 +59,7 @@ export function TextFilter<TData>({ columns, globalFilter, onGlobalFilterChange 
         </PopoverTrigger>
         <PopoverContent className="w-[150px] p-0" align="start">
           <div className="flex flex-col">
-            <Button variant="ghost" className="w-full justify-start" onClick={() => setSelectedColumn(null)}>
+            <Button variant="ghost" className="w-full justify-start" onClick={() => onSelectedColumnChange(null)}>
               전체
             </Button>
             {columnOptions.map((column) => (
@@ -60,7 +67,7 @@ export function TextFilter<TData>({ columns, globalFilter, onGlobalFilterChange 
                 key={column.id}
                 variant="ghost"
                 className="w-full justify-start"
-                onClick={() => setSelectedColumn(column.id)}
+                onClick={() => onSelectedColumnChange(column.id)}
               >
                 {column.label}
               </Button>

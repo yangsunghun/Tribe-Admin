@@ -34,6 +34,7 @@ const GroupTable = ({ groups }: GroupTableProps) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
 
   const handleColumnVisibilityChange = (columnId: string, visible: boolean) => {
     setColumnVisibility((prev) => ({
@@ -42,34 +43,28 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     }));
   };
 
-  const handleGlobalFilterChange = (value: string, columnId?: string) => {
+  const handleGlobalFilterChange = (value: string) => {
     setGlobalFilter(value);
-    if (columnId) {
+    if (selectedColumn) {
       setColumnFilters((prev) => {
-        const newFilters = prev.filter((filter) => filter.id !== columnId);
-        if (value) {
-          newFilters.push({ id: columnId, value });
-        }
-        return newFilters;
+        const column = columns.find((col) => (col as any).accessorKey === selectedColumn);
+        if (!column || !column.id) return prev;
+        return [
+          ...prev.filter((filter) => filter.id !== column.id),
+          {
+            id: column.id,
+            value
+          }
+        ];
       });
     } else {
       setColumnFilters([]);
     }
   };
 
-  const handleSearch = () => {
-    // Clear existing date filters
-    const newFilters = columnFilters.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
-
-    // Add new date filter
-    if (dateRange?.from) {
-      newFilters.push({
-        id: dateFilterColumnMap[selectedDateFilter],
-        value: dateRange
-      });
-    }
-
-    setColumnFilters(newFilters);
+  const handleSelectedColumnChange = (columnId: string | null) => {
+    setSelectedColumn(columnId);
+    setColumnFilters([]);
   };
 
   return (
@@ -80,6 +75,8 @@ const GroupTable = ({ groups }: GroupTableProps) => {
             columns={columns}
             globalFilter={globalFilter}
             onGlobalFilterChange={handleGlobalFilterChange}
+            selectedColumn={selectedColumn}
+            onSelectedColumnChange={handleSelectedColumnChange}
           />
           <DateFilter
             selectedDateFilter={selectedDateFilter}
@@ -106,6 +103,8 @@ const GroupTable = ({ groups }: GroupTableProps) => {
         setGlobalFilter={setGlobalFilter}
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
+        selectedColumn={selectedColumn}
+        onSelectedColumnChange={handleSelectedColumnChange}
       />
     </div>
   );
