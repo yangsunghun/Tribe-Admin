@@ -1,7 +1,6 @@
 "use client";
 
 import { getDynamicRouteInfo, navMainItems } from "@/config/navMainItems";
-import { House } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "../ui/breadcrumb";
@@ -43,14 +42,11 @@ const PageDirectory = () => {
   const items = getBreadcrumbItems(pathname);
 
   return (
-    <div className="flex items-center justify-between rounded-md bg-white px-6 py-4">
-      <h2 className="text-subtitle text-primary-700 font-bold">{items[items.length - 1]?.title}</h2>
+    <div className="border-b border-gray-100 py-4">
       <Breadcrumb className="text-caption">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">
-              <House size={14} />
-            </BreadcrumbLink>
+            <BreadcrumbLink href="/">Tribe Admin</BreadcrumbLink>
           </BreadcrumbItem>
           {items.map((item, idx) => (
             <Fragment key={item.url || item.title}>
@@ -66,6 +62,7 @@ const PageDirectory = () => {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
+      <h2 className="text-title1 text-primary-700 mt-2 font-bold">{items[items.length - 1]?.title}</h2>
     </div>
   );
 };
