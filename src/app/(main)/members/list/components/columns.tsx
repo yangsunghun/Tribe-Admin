@@ -14,6 +14,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
+type ExtendedColumnDef<TData> = ColumnDef<TData> & {
+  enableSearch?: boolean;
+};
+
 const calculateAgeGroup = (birthDate: string): string => {
   const today = new Date();
   const birth = new Date(birthDate);
@@ -31,7 +35,7 @@ const calculateAgeGroup = (birthDate: string): string => {
   return `${ageGroup}대`;
 };
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ExtendedColumnDef<User>[] = [
   {
     id: "선택",
     header: ({ table }) => (
@@ -49,7 +53,8 @@ export const columns: ColumnDef<User>[] = [
       />
     ),
     enableSorting: false,
-    enableHiding: false
+    enableHiding: false,
+    enableSearch: false
   },
   {
     accessorKey: "profile_img",
@@ -64,12 +69,14 @@ export const columns: ColumnDef<User>[] = [
           <UserRound size={16} />
         </div>
       );
-    }
+    },
+    enableSearch: false
   },
   {
     accessorKey: "nickname",
     id: "닉네임",
-    header: "닉네임"
+    header: "닉네임",
+    enableSearch: true
   },
   {
     accessorKey: "name",
@@ -82,7 +89,8 @@ export const columns: ColumnDef<User>[] = [
           {user.name || "-"}
         </Link>
       );
-    }
+    },
+    enableSearch: true
   },
   {
     accessorKey: "email",
@@ -129,7 +137,8 @@ export const columns: ColumnDef<User>[] = [
       const email = row.getValue(columnId) as string;
       return email.endsWith("@" + filterValue);
     },
-    enableSorting: false // 정렬은 비활성화
+    enableSorting: false,
+    enableSearch: true
   },
   {
     accessorKey: "gender",
@@ -173,7 +182,8 @@ export const columns: ColumnDef<User>[] = [
       const gender = row.original.gender === "MALE" ? "남" : "여";
       return gender === filterValue;
     },
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "birth_date",
@@ -189,7 +199,8 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return row.original.birth_date?.slice(0, 10) || "-";
     },
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   },
   {
     accessorKey: "age_group",
@@ -240,7 +251,8 @@ export const columns: ColumnDef<User>[] = [
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue) return true;
       return calculateAgeGroup(row.original.birth_date) === filterValue;
-    }
+    },
+    enableSearch: false
   },
   {
     accessorKey: "marketing_agreed",
@@ -260,6 +272,7 @@ export const columns: ColumnDef<User>[] = [
         </Badge>
       );
     },
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   }
 ];

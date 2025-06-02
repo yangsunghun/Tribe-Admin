@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,19 +7,51 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Group } from "@/mocks/groups";
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
-export const columns: ColumnDef<Group>[] = [
+type ExtendedColumnDef<TData> = ColumnDef<TData> & {
+  enableSearch?: boolean | false;
+};
+
+export const columns: ExtendedColumnDef<Group>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+    enableSearch: false
+  },
   {
     accessorKey: "no",
     id: "번호",
-    header: "번호",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          번호
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => row.index + 1,
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "group_id",
@@ -29,18 +62,27 @@ export const columns: ColumnDef<Group>[] = [
         {row.original.group_id}
       </Link>
     ),
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: true
   },
   {
     accessorKey: "title",
     id: "모임명",
-    header: "모임명",
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          모임명
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => (
       <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
         {row.original.title}
       </Link>
     ),
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: true
   },
   {
     accessorKey: "display",
@@ -81,7 +123,8 @@ export const columns: ColumnDef<Group>[] = [
       if (!filterValue) return true;
       return row.original.display === filterValue;
     },
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "thumbnail",
@@ -93,14 +136,16 @@ export const columns: ColumnDef<Group>[] = [
       ) : (
         "-"
       ),
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "participants",
     id: "참여인원",
     header: "참여인원",
     cell: ({ row }) => `${row.original.participants}/${row.original.max_participants}`,
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "status",
@@ -144,7 +189,8 @@ export const columns: ColumnDef<Group>[] = [
       if (!filterValue) return true;
       return row.original.status === filterValue;
     },
-    enableSorting: false
+    enableSorting: false,
+    enableSearch: false
   },
   {
     accessorKey: "created_at",
@@ -158,7 +204,8 @@ export const columns: ColumnDef<Group>[] = [
       );
     },
     cell: ({ row }) => row.original.created_at.slice(0, 10),
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   },
   {
     accessorKey: "expired_at",
@@ -172,13 +219,22 @@ export const columns: ColumnDef<Group>[] = [
       );
     },
     cell: ({ row }) => (row.original.expired_at ? row.original.expired_at.slice(0, 10) : "-"),
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   },
   {
     accessorKey: "registrant",
     id: "등록자",
-    header: "등록자",
-    enableSorting: false
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          등록자
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    enableSorting: false,
+    enableSearch: true
   },
   {
     accessorKey: "registeredAt",
@@ -192,13 +248,22 @@ export const columns: ColumnDef<Group>[] = [
       );
     },
     cell: ({ row }) => row.original.registeredAt.slice(0, 10),
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   },
   {
     accessorKey: "editor",
     id: "수정자",
-    header: "수정자",
-    enableSorting: false
+    header: ({ column }) => {
+      return (
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          수정자
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    enableSorting: false,
+    enableSearch: true
   },
   {
     accessorKey: "updated_at",
@@ -212,6 +277,7 @@ export const columns: ColumnDef<Group>[] = [
       );
     },
     cell: ({ row }) => row.original.updated_at.slice(0, 10),
-    enableSorting: true
+    enableSorting: true,
+    enableSearch: false
   }
 ];

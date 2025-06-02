@@ -42,6 +42,21 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     }));
   };
 
+  const handleGlobalFilterChange = (value: string, columnId?: string) => {
+    setGlobalFilter(value);
+    if (columnId) {
+      setColumnFilters((prev) => {
+        const newFilters = prev.filter((filter) => filter.id !== columnId);
+        if (value) {
+          newFilters.push({ id: columnId, value });
+        }
+        return newFilters;
+      });
+    } else {
+      setColumnFilters([]);
+    }
+  };
+
   const handleSearch = () => {
     // Clear existing date filters
     const newFilters = columnFilters.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
@@ -61,10 +76,10 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     <div className="space-y-4 pt-4">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-4">
-          <TextFilter
+          <TextFilter<Group>
+            columns={columns}
             globalFilter={globalFilter}
-            onGlobalFilterChange={setGlobalFilter}
-            placeholder="등록자, 수정자, 모임명 검색"
+            onGlobalFilterChange={handleGlobalFilterChange}
           />
           <DateFilter
             selectedDateFilter={selectedDateFilter}

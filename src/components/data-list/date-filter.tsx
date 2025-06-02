@@ -32,7 +32,7 @@ export function DateFilter({
 
   return (
     <div className="flex items-center gap-2">
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="w-[150px] justify-between">
             {selectedDateFilter

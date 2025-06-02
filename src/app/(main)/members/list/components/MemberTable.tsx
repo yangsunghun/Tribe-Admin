@@ -24,35 +24,12 @@ const MemberTable = ({ users }: MemberTableProps) => {
     }));
   };
 
-  const columnDefinitions = columns.map((column) => {
-    const id = column.id || (column as any).accessorKey || "";
-
-    let label = "";
-    if (typeof column.header === "string") {
-      label = column.header;
-    } else if (column.id === "select") {
-      label = "선택";
-    } else {
-      label = id;
-    }
-
-    return {
-      id,
-      label,
-      canHide: column.enableHiding !== false
-    };
-  });
-
   return (
     <div className="space-y-4 pt-4">
       <div className="flex items-center gap-2">
-        <TextFilter
-          globalFilter={globalFilter}
-          onGlobalFilterChange={setGlobalFilter}
-          placeholder="이름 또는 이메일 검색"
-        />
+        <TextFilter columns={columns} globalFilter={globalFilter} onGlobalFilterChange={setGlobalFilter} />
         <ToggleVisibility
-          columns={columnDefinitions}
+          columns={columns}
           columnVisibility={columnVisibility}
           onColumnVisibilityChange={handleColumnVisibilityChange}
         />
