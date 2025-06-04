@@ -1,6 +1,6 @@
 "use client";
 
-import useLockScroll from "@/hooks/useLockScroll";
+import useLockScroll from "@/hooks/common/useLockScroll";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
 

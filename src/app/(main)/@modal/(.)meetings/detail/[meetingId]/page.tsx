@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/(main)/loading";
 import ModalBg from "@/components/etc/ModalBg";
 import { mockGroups } from "@/mocks/groups";
 import { useQuery } from "@tanstack/react-query";
@@ -27,13 +28,7 @@ const MeetingDetailModal = () => {
   });
 
   if (isLoading) {
-    return (
-      <ModalBg>
-        <div className="inner relative max-w-[1080px] rounded-2xl bg-white p-10 shadow-lg">
-          <div className="text-lg">Loading...</div>
-        </div>
-      </ModalBg>
-    );
+    return <Loading />;
   }
 
   if (error || !meeting) {
