@@ -1,10 +1,10 @@
-import { mockGroups } from "@/mocks/groups";
-import GroupTable from "./components/GroupTable";
+import { mockMeetings } from "@/mocks/meetings";
+import MeetingTable from "./components/MeetingTable";
 
 const MeetingsListPage = () => {
   return (
     <>
-      <GroupTable groups={mockGroups} />
+      <MeetingTable meetings={mockMeetings} />
     </>
   );
 };

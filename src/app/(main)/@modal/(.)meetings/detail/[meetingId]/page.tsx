@@ -2,14 +2,14 @@
 
 import Loading from "@/app/(main)/loading";
 import ModalBg from "@/components/etc/ModalBg";
-import { mockGroups } from "@/mocks/groups";
+import { mockMeetings } from "@/mocks/meetings";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 
 const fetchMeetingDetail = async (meetingId: string) => {
   // API 호출을 시뮬레이션하기 위해 약간의 지연 추가
   await new Promise((resolve) => setTimeout(resolve, 500));
-  const foundMeeting = mockGroups.find((group) => group.group_id === meetingId);
+  const foundMeeting = mockMeetings.find((group) => group.group_id === meetingId);
   if (!foundMeeting) {
     throw new Error("Meeting not found");
   }

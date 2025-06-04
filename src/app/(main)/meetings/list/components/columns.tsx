@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Group } from "@/mocks/groups";
+import type { Meeting } from "@/mocks/meetings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -17,7 +17,7 @@ type ExtendedColumnDef<TData> = ColumnDef<TData> & {
   enableSearch?: boolean | false;
 };
 
-export const columns: ExtendedColumnDef<Group>[] = [
+export const columns: ExtendedColumnDef<Meeting>[] = [
   {
     id: "select",
     header: ({ table }) => (

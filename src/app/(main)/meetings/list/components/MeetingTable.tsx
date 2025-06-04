@@ -4,14 +4,14 @@ import { DataTable } from "@/components/data-list/data-table";
 import { DateFilter, type DateFilterType } from "@/components/data-list/date-filter";
 import { TextFilter } from "@/components/data-list/text-filter";
 import { ToggleVisibility } from "@/components/data-list/toggle-visibility";
-import { Group } from "@/mocks/groups";
+import type { Meeting } from "@/mocks/meetings";
 import type { ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { columns } from "./columns";
 
-interface GroupTableProps {
-  groups: Group[];
+interface MeetingTableProps {
+  meetings: Meeting[];
 }
 
 const dateFilterOptions = [
@@ -28,7 +28,7 @@ const dateFilterColumnMap = {
   meetingEnd: "모임종료일"
 } as const;
 
-const GroupTable = ({ groups }: GroupTableProps) => {
+const MeetingTable = ({ meetings }: MeetingTableProps) => {
   const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterType>("registrant");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [globalFilter, setGlobalFilter] = useState("");
@@ -126,7 +126,7 @@ const GroupTable = ({ groups }: GroupTableProps) => {
     <div className="space-y-4 pt-4">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-4">
-          <TextFilter<Group>
+          <TextFilter<Meeting>
             columns={columns}
             globalFilter={globalFilter}
             onGlobalFilterChange={handleGlobalFilterChange}
@@ -142,7 +142,7 @@ const GroupTable = ({ groups }: GroupTableProps) => {
           />
         </div>
 
-        <ToggleVisibility<Group>
+        <ToggleVisibility<Meeting>
           columns={columns}
           columnVisibility={columnVisibility}
           onColumnVisibilityChange={handleColumnVisibilityChange}
@@ -151,7 +151,7 @@ const GroupTable = ({ groups }: GroupTableProps) => {
 
       <DataTable
         columns={columns}
-        data={groups}
+        data={meetings}
         columnFilters={columnFilters}
         setColumnFilters={setColumnFilters}
         globalFilter={globalFilter}
@@ -165,4 +165,4 @@ const GroupTable = ({ groups }: GroupTableProps) => {
   );
 };
 
-export default GroupTable;
+export default MeetingTable;
