@@ -1,6 +1,7 @@
 "use client";
 
 import type { NavMainItem } from "@/config/navMainItems";
+import { getDynamicRouteInfo } from "@/config/navMainItems";
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -26,9 +27,17 @@ interface NavMainProps {
 
 const NavMain = ({ items, isCollapsed }: NavMainProps) => {
   const pathname = usePathname();
+  const dynamicRouteInfo = getDynamicRouteInfo(pathname);
 
   const isSubMenuActive = (subItems: { url: string }[] | undefined) => {
     if (!subItems) return false;
+
+    // 상세 페이지인 경우 부모 URL과 일치하는지 확인
+    if (dynamicRouteInfo) {
+      return subItems.some((item) => item.url === dynamicRouteInfo.parentUrl);
+    }
+
+    // 일반 페이지인 경우 현재 URL과 일치하는지 확인
     return subItems.some((item) => pathname === item.url);
   };
 
@@ -63,7 +72,9 @@ const NavMain = ({ items, isCollapsed }: NavMainProps) => {
                                 <Link
                                   className={clsx(
                                     "block px-4 py-2",
-                                    pathname === subItem.url ? "text-primary-700 font-semibold" : "text-primary-800"
+                                    pathname === subItem.url || dynamicRouteInfo?.parentUrl === subItem.url
+                                      ? "text-primary-700 font-semibold"
+                                      : "text-primary-800"
                                   )}
                                   href={subItem.url}
                                 >
@@ -106,7 +117,9 @@ const NavMain = ({ items, isCollapsed }: NavMainProps) => {
                               <Link
                                 className={clsx(
                                   "block !bg-transparent",
-                                  pathname === subItem.url ? "!text-primary-700 font-semibold" : "text-primary-800"
+                                  pathname === subItem.url || dynamicRouteInfo?.parentUrl === subItem.url
+                                    ? "!text-primary-700 font-semibold"
+                                    : "text-primary-800"
                                 )}
                                 href={subItem.url}
                               >
@@ -133,7 +146,8 @@ const NavMain = ({ items, isCollapsed }: NavMainProps) => {
                     href={item.url!}
                     className={clsx(
                       "flex items-center gap-2",
-                      pathname === item.url && "text-primary-700 font-semibold",
+                      (pathname === item.url || dynamicRouteInfo?.parentUrl === item.url) &&
+                        "text-primary-700 font-semibold",
                       "data-[state=collapsed]:gap-0"
                     )}
                   >

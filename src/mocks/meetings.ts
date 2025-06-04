@@ -1,4 +1,4 @@
-export interface Group {
+export interface Meeting {
   group_id: string;
   host_id: string;
   category_id: number;
@@ -37,14 +37,14 @@ function randomDate(start: Date, end: Date) {
 }
 
 const titles = [
-  "헬스 모임",
-  "스터디 모임",
-  "등산 모임",
-  "요리 모임",
-  "영화 감상",
-  "독서 모임",
-  "자전거 동호회",
-  "사진 모임"
+  "헬스 모임입니다",
+  "스터디 모임입니다",
+  "등산 모임입니다",
+  "요리 모임입니다",
+  "영화 감상 모임입니다",
+  "독서 모임입니다",
+  "자전거 동호회입니다",
+  "사진 모임입니다"
 ];
 const descriptions = [
   "건강을 위한 모임입니다.",
@@ -88,7 +88,7 @@ const challengeStatuses = ["진행중", "완료", "대기중"];
 const places = ["서울 강남구", "부산 해운대구", "대구 수성구", "광주 북구"];
 const challengeRules = ["매일 1회 인증", "주 3회 인증", "월 2회 인증"];
 
-export const mockGroups: Group[] = Array.from({ length: 100 }).map((_, i) => {
+export const mockMeetings: Meeting[] = Array.from({ length: 100 }).map((_, i) => {
   const start = randomDate(new Date(2025, 0, 1), new Date(2025, 5, 1));
   const end = randomDate(new Date(2025, 5, 2), new Date(2025, 11, 31));
   const max_participants = 10 + (i % 20);

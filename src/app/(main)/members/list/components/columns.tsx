@@ -85,7 +85,7 @@ export const columns: ExtendedColumnDef<User>[] = [
     cell: ({ row }) => {
       const user = row.original;
       return (
-        <Link href={`/members/${user.user_id}`} className="font-semibold hover:underline">
+        <Link href={`/members/detail/${user.user_id}`} className="font-semibold hover:underline">
           {user.name || "-"}
         </Link>
       );

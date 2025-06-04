@@ -1,8 +1,9 @@
+import "@/assets/css/globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
+import TQProviders from "@/components/providers/TQProviders";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ReactNode } from "react";
-import "./globals.css";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="ko" className="min-h-screen">
       <body className={`${pretendard.className}`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <TQProviders>{children}</TQProviders>
+        </AuthProvider>
       </body>
     </html>
   );

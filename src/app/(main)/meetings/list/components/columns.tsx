@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Group } from "@/mocks/groups";
+import type { Meeting } from "@/mocks/meetings";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -17,7 +17,7 @@ type ExtendedColumnDef<TData> = ColumnDef<TData> & {
   enableSearch?: boolean | false;
 };
 
-export const columns: ExtendedColumnDef<Group>[] = [
+export const columns: ExtendedColumnDef<Meeting>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -50,7 +50,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
     id: "모임번호",
     header: "모임번호",
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
+      <Link href={`/meetings/detail/${row.original.group_id}`} className="hover:underline">
         {row.original.group_id}
       </Link>
     ),
@@ -62,7 +62,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
     id: "모임명",
     header: "모임명",
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
+      <Link href={`/meetings/detail/${row.original.group_id}`} className="hover:underline">
         {row.original.title}
       </Link>
     ),
