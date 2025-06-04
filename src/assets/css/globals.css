@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import "./tailwind.css";
 /*
   ---break---
 */
 @custom-variant dark (&:is(.dark *));
 
-@config '../../tailwind.config.ts';
+@config '../../../tailwind.config.ts';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -37,7 +37,12 @@
 }
 
 @utility inner {
-  @apply lt:w-[91.45%] mx-auto w-[83%];
+  width: 83%;
+  @media (max-width: 1200px) {
+    width: 91.45%;
+  }
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @utility click-box {
@@ -104,50 +109,9 @@
 }
 
 @layer utilities {
-  .image-modal .swiper .swiper-pagination {
-    @apply tb:bottom-5 bottom-20;
-  }
-
-  /* .swiper .swiper-pagination .swiper-pagination-bullet {
-  @apply bg-bg-01 opacity-100;
-} */
-
-  /* .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  @apply bg-primary-default opacity-100;
-} */
-
-  .swiper .swiper-pagination .swiper-pagination-bullet {
-    @apply tb:mx-[3px]! tb:h-[6px] tb:w-[6px] mx-[4px]! h-[8px] w-[8px];
-  }
-
-  /* .image-modal .swiper .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  @apply bg-primary-default;
-} */
-
-  /* input type=search x button 제거 */
-  /* WebKit browsers */
-  input[type="search"]::-webkit-search-cancel-button {
-    display: none;
-  }
-
-  /* Firefox */
-  input[type="search"]::-moz-search-cancel-button {
-    display: none;
-  }
-
-  /* Edge */
-  input[type="search"]::-ms-clear {
-    display: none;
-  }
-
-  /* 파일 인풋 커서 포인터 안 먹는 이슈 해결 */
-  input[type=file], /* FF, IE7+, chrome */
-input[type=file]::-webkit-file-upload-button {
-    cursor: pointer;
-  }
-
-  /* shadcn용 radius 변경시 수정 */
 }
+
+/* shadcn용 radius 변경시 수정 */
 @layer base {
   :root {
     --radius: 0.5rem;

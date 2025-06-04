@@ -1,8 +1,8 @@
+import "@/assets/css/globals.css";
 import AuthProvider from "@/components/providers/AuthProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ReactNode } from "react";
-import "./globals.css";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
