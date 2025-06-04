@@ -221,43 +221,43 @@
 }
 
 /* Utilities for font sizes with line-height and letter-spacing */
-@utility font-heading {
+@utility text-heading {
   font-size: var(--font-size-heading);
   line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-heading);
 }
 
-@utility font-title1 {
+@utility text-title1 {
   font-size: var(--font-size-title1);
   line-height: var(--line-height-title1);
   letter-spacing: var(--letter-spacing-title1);
 }
 
-@utility font-subtitle {
+@utility text-subtitle {
   font-size: var(--font-size-subtitle);
   line-height: var(--line-height-subtitle);
   letter-spacing: var(--letter-spacing-subtitle);
 }
 
-@utility font-title2 {
+@utility text-title2 {
   font-size: var(--font-size-title2);
   line-height: var(--line-height-title2);
   letter-spacing: var(--letter-spacing-title2);
 }
 
-@utility font-body {
+@utility text-body {
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
 }
 
-@utility font-caption {
+@utility text-caption {
   font-size: var(--font-size-caption);
   line-height: var(--line-height-caption);
   letter-spacing: var(--letter-spacing-caption);
 }
 
-@utility font-small {
+@utility text-small {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
   letter-spacing: var(--letter-spacing-small);
