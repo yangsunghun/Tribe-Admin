@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-const MainLayout = async ({ children }: { children: ReactNode }) => {
+const MainLayout = async ({ children, modal }: { children: ReactNode; modal: ReactNode }) => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -26,6 +26,7 @@ const MainLayout = async ({ children }: { children: ReactNode }) => {
           </section>
         </SidebarProvider>
       </main>
+      {modal}
     </>
   );
 };

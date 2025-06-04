@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogOverlay } from "@/components/ui/dialog";
+import ModalBg from "@/components/etc/ModalBg";
 import { mockGroups } from "@/mocks/groups";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -32,31 +32,31 @@ const MeetingDetailModal = () => {
 
   if (isLoading) {
     return (
-      <DialogOverlay>
+      <ModalBg>
         <div className="inner relative max-w-[1080px] rounded-2xl bg-white p-10 shadow-lg">
           <div className="text-lg">Loading...</div>
         </div>
-      </DialogOverlay>
+      </ModalBg>
     );
   }
 
   if (error || !meeting) {
     return (
-      <DialogOverlay>
+      <ModalBg>
         <div className="inner relative max-w-[1080px] rounded-2xl bg-white p-10 shadow-lg">
           <div className="text-lg">미팅을 찾을 수 없습니다.</div>
         </div>
-      </DialogOverlay>
+      </ModalBg>
     );
   }
 
   return (
-    <DialogOverlay>
+    <ModalBg>
       <div className="inner relative max-w-[1080px] rounded-2xl bg-white p-10 shadow-lg">
         <div className="mb-8">
           <h1 className="mb-4 text-3xl font-bold">{meeting.title}</h1>
           <div className="flex items-center gap-4 text-gray-600">
-            <span>모d임장: {meeting.nickname}</span>
+            <span>모임장: {meeting.nickname}</span>
             <span>•</span>
             <span>
               참가자: {meeting.participants}/{meeting.max_participants}명
@@ -106,7 +106,7 @@ const MeetingDetailModal = () => {
           </div>
         </div>
       </div>
-    </DialogOverlay>
+    </ModalBg>
   );
 };
 

@@ -58,7 +58,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
     id: "모임번호",
     header: "모임번호",
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
+      <Link href={`/meetings/${row.original.group_id}/view`} className="hover:underline">
         {row.original.group_id}
       </Link>
     ),

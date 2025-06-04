@@ -1,10 +1,10 @@
-import { DialogOverlay } from "@/components/ui/dialog";
+import ModalBg from "@/components/etc/ModalBg";
 
 export default function Loading() {
   return (
-    <DialogOverlay>
+    <ModalBg>
       <div className="h-16 w-16 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
-    </DialogOverlay>
+    </ModalBg>
 
     // <div className="fixed inset-0 z-[50] bg-bg-01"></div>
   );
