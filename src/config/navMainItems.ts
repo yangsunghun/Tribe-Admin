@@ -64,13 +64,13 @@ export const navMainItems: NavMainItem[] = [
     ]
   },
   {
-    title: "문서",
-    url: "/docs",
+    title: "전시관리",
+    url: "/exhibitions/list",
     icon: FileText
   },
   {
-    title: "설정",
-    url: "/settings",
+    title: "시스템 관리",
+    url: "/systems/accountList",
     icon: Settings
   }
 ];
