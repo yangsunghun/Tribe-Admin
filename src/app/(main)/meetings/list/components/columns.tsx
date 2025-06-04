@@ -77,7 +77,7 @@ export const columns: ExtendedColumnDef<Group>[] = [
       );
     },
     cell: ({ row }) => (
-      <Link href={`/meetings/${row.original.group_id}`} className="hover:underline">
+      <Link href={`/meetings/detail/${row.original.group_id}`} className="hover:underline">
         {row.original.title}
       </Link>
     ),

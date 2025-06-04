@@ -42,9 +42,9 @@ const MeetingDetailPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="mb-4 text-3xl font-bold">{meeting.title}</h1>
+        <h2 className="text-title1 mb-4 font-bold">{meeting.title}</h2>
         <div className="flex items-center gap-4 text-gray-600">
           <span>모임장: {meeting.nickname}</span>
           <span>•</span>
