@@ -14,16 +14,26 @@ export interface NavMainItem {
 
 // 동적 라우트 패턴 매칭을 위한 함수
 export const getDynamicRouteInfo = (pathname: string) => {
-  // 회원 상세 페이지 패턴 (list, register 등은 제외)
-  const memberDetailPattern = /^\/members\/(?!list$|register$)[A-Za-z0-9_-]+$/;
-  const memberDetailMatch = pathname.match(memberDetailPattern);
+  // detail 페이지 패턴 매칭
+  const detailPattern = /^\/(members|meetings)\/detail\/([A-Za-z0-9_-]+)$/;
+  const detailMatch = pathname.match(detailPattern);
 
-  if (memberDetailMatch) {
-    return {
-      title: "회원 상세",
-      parent: "회원 관리",
-      parentUrl: "/members/list"
+  if (detailMatch) {
+    const [, section, id] = detailMatch;
+    const sectionMap = {
+      members: {
+        title: "회원 상세",
+        parent: "회원 관리",
+        parentUrl: "/members/list"
+      },
+      meetings: {
+        title: "모임 상세",
+        parent: "모임 관리",
+        parentUrl: "/meetings/list"
+      }
     };
+
+    return sectionMap[section as keyof typeof sectionMap];
   }
 
   return null;
