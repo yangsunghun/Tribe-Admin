@@ -1,0 +1,33 @@
+export interface Group {
+  group_id: string;
+  host_id: string;
+  category_id: number;
+  title: string;
+  description: string;
+  thumbnail?: string | null;
+  group_type: "MISSON" | "CONTINUOUS";
+  meeting_type: "ONLINE" | "OFFLINE";
+  location_address?: string | null;
+  participants: number;
+  max_participants: number;
+  gender_restriction: "NONE" | "MALE" | "FEMALE";
+  min_age: number;
+  max_age: number;
+  status: "WAITING" | "ONGOIING" | "FINISHED" | "DISBANDED";
+  created_at: string;
+  updated_at: string;
+  expired_at?: string | null;
+  display: "Y" | "N";
+  registrant: string;
+  registeredAt: string;
+  editor: string;
+  nickname: string;
+  reportCount: number;
+  goal: string;
+  authRule: string;
+  challengeStatus: string;
+  age: string;
+  place: string;
+  description_detail: string;
+  challengeRule: string;
+}
