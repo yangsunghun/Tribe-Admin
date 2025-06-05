@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/app/(main)/loading";
+import Loading from "@/app/loading";
 import useMeetingDetail from "@/hooks/meetings/useMeetingDetail";
 import { useParams } from "next/navigation";
 
