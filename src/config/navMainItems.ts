@@ -19,7 +19,7 @@ export const getDynamicRouteInfo = (pathname: string) => {
   const detailMatch = pathname.match(detailPattern);
 
   if (detailMatch) {
-    const [, section, id] = detailMatch;
+    const [, section] = detailMatch;
     const sectionMap = {
       members: {
         title: "회원 상세",

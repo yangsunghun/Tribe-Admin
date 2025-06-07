@@ -1,33 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, ChevronDown } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { type FormEvent } from "react";
 import type { DateRange } from "react-day-picker";
 
 export type DateFilterType = "registrant" | "editor" | "meetingStart" | "meetingEnd";
 
 interface DateFilterProps {
-  dateRange: DateRange | undefined;
-  onDateRangeChange: (range: DateRange | undefined) => void;
-  dateFilterOptions: { value: DateFilterType; label: string }[];
   selectedDateFilter: DateFilterType;
   onDateFilterChange: (value: DateFilterType) => void;
+  dateRange: DateRange | undefined;
+  onDateRangeChange: (range: DateRange | undefined) => void;
+  dateFilterOptions: Array<{ value: DateFilterType; label: string }>;
 }
 
 export function DateFilter({
+  selectedDateFilter,
+  onDateFilterChange,
   dateRange,
   onDateRangeChange,
-  dateFilterOptions,
-  selectedDateFilter,
-  onDateFilterChange
+  dateFilterOptions
 }: DateFilterProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
   const handleDateFilterChange = (value: DateFilterType) => {
     onDateFilterChange(value);
-    setIsOpen(false);
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -37,51 +36,40 @@ export function DateFilter({
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className="w-[150px] justify-between">
-            {selectedDateFilter
-              ? dateFilterOptions.find((option) => option.value === selectedDateFilter)?.label
-              : "날짜 필터"}
-            <ChevronDown className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[150px] p-0" align="start">
+      <Select value={selectedDateFilter} onValueChange={onDateFilterChange}>
+        <SelectTrigger className="h-8 w-[150px]">
+          <SelectValue placeholder="날짜 필터 선택" />
+        </SelectTrigger>
+        <SelectContent>
           {dateFilterOptions.map((option) => (
-            <Button
-              key={option.value}
-              variant="ghost"
-              className="w-full justify-start"
-              onClick={() => handleDateFilterChange(option.value)}
-            >
+            <SelectItem key={option.value} value={option.value}>
               {option.label}
-            </Button>
+            </SelectItem>
           ))}
-        </PopoverContent>
-      </Popover>
+        </SelectContent>
+      </Select>
 
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            size="sm"
-            className={cn("w-[240px] justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
+            className={cn("h-8 w-[200px] justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {dateRange?.from ? (
               dateRange.to ? (
                 <>
-                  {dateRange.from.toLocaleDateString()} - {dateRange.to.toLocaleDateString()}
+                  {format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}
                 </>
               ) : (
-                dateRange.from.toLocaleDateString()
+                format(dateRange.from, "LLL dd, y")
               )
             ) : (
-              <span>날짜 범위 선택</span>
+              <span>날짜를 선택하세요</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="text-caption w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             initialFocus
             mode="range"

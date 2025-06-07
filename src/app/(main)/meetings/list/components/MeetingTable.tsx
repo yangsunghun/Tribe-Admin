@@ -6,6 +6,7 @@ import { TextFilter } from "@/components/data-list/text-filter";
 import { ToggleVisibility } from "@/components/data-list/toggle-visibility";
 import { useTableFilters } from "@/hooks/useTableFilters";
 import type { Meeting } from "@/mocks/meetings";
+import type { VisibilityState } from "@tanstack/react-table";
 import { useState } from "react";
 import type { DateRange } from "react-day-picker";
 import { columns } from "./columns";
@@ -20,6 +21,8 @@ const dateFilterOptions = [
   { value: "meetingStart" as const, label: "모임시작일" },
   { value: "meetingEnd" as const, label: "모임종료일" }
 ];
+
+type DateFilterColumn = "등록일시" | "수정일시" | "모임시작일" | "모임종료일";
 
 const dateFilterColumnMap = {
   registrant: "등록일시",
@@ -40,16 +43,21 @@ const MeetingTable = ({ meetings }: MeetingTableProps) => {
     columnVisibility,
     setColumnVisibility,
     selectedColumn,
-    handleColumnVisibilityChange,
     handleGlobalFilterChange,
     handleSelectedColumnChange
   } = useTableFilters<Meeting>({ columns });
+
+  const handleColumnVisibilityChange = (value: VisibilityState) => {
+    setColumnVisibility(value);
+  };
 
   const handleDateFilterChange = (value: DateFilterType) => {
     setSelectedDateFilter(value);
     // 날짜 필터 변경 시 기존 날짜 필터 제거
     setColumnFilters((prev) => {
-      const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+      const newFilters = prev.filter(
+        (filter) => !Object.values(dateFilterColumnMap).includes(filter.id as DateFilterColumn)
+      );
       return newFilters;
     });
   };
@@ -59,7 +67,9 @@ const MeetingTable = ({ meetings }: MeetingTableProps) => {
     if (range?.from) {
       setColumnFilters((prev) => {
         // 기존 날짜 필터 제거
-        const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+        const newFilters = prev.filter(
+          (filter) => !Object.values(dateFilterColumnMap).includes(filter.id as DateFilterColumn)
+        );
         // 새로운 날짜 필터 추가
         const columnId = dateFilterColumnMap[selectedDateFilter];
         newFilters.push({
@@ -71,7 +81,9 @@ const MeetingTable = ({ meetings }: MeetingTableProps) => {
     } else {
       // 날짜 범위가 없으면 날짜 필터 제거
       setColumnFilters((prev) => {
-        const newFilters = prev.filter((filter) => !Object.values(dateFilterColumnMap).includes(filter.id as any));
+        const newFilters = prev.filter(
+          (filter) => !Object.values(dateFilterColumnMap).includes(filter.id as DateFilterColumn)
+        );
         return newFilters;
       });
     }
@@ -85,7 +97,7 @@ const MeetingTable = ({ meetings }: MeetingTableProps) => {
             columns={columns}
             globalFilter={globalFilter}
             onGlobalFilterChange={handleGlobalFilterChange}
-            selectedColumn={selectedColumn}
+            selectedColumn={selectedColumn || ""}
             onSelectedColumnChange={handleSelectedColumnChange}
           />
           <DateFilter
@@ -113,7 +125,7 @@ const MeetingTable = ({ meetings }: MeetingTableProps) => {
         setGlobalFilter={setGlobalFilter}
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
-        selectedColumn={selectedColumn}
+        selectedColumn={selectedColumn || ""}
         onSelectedColumnChange={handleSelectedColumnChange}
       />
     </div>

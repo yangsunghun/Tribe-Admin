@@ -1,21 +1,21 @@
-import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { PrismaClient } from "@prisma/client";
+import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
   // 관리자 계정 생성
-  const adminPassword = await hash('admin1234', 12);
-  
+  const adminPassword = await hash("admin1234", 12);
+
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@example.com' },
+    where: { email: "admin@example.com" },
     update: {},
     create: {
-      email: 'admin@example.com',
-      name: '관리자',
+      email: "admin@example.com",
+      name: "관리자",
       password: adminPassword,
-      role: 'ADMIN',
-    },
+      role: "ADMIN"
+    }
   });
 
   console.log({ admin });
@@ -28,4 +28,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  }); 
+  });

@@ -1,4 +1,4 @@
-import { type ColumnDef, type ColumnFiltersState, type VisibilityState } from "@tanstack/react-table";
+import { type ColumnDef, type ColumnFiltersState, type OnChangeFn, type VisibilityState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
 // accessorKey를 가진 컬럼 타입 정의
@@ -29,11 +29,12 @@ export function useTableFilters<TData>({ columns }: UseTableFiltersProps<TData>)
     );
   }, [columns]);
 
-  const handleColumnVisibilityChange = (columnId: string, visible: boolean) => {
-    setColumnVisibility((prev) => ({
-      ...prev,
-      [columnId]: visible
-    }));
+  const handleColumnVisibilityChange: OnChangeFn<VisibilityState> = (value) => {
+    setColumnVisibility(typeof value === "function" ? value(columnVisibility) : value);
+  };
+
+  const handleColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (value) => {
+    setColumnFilters(typeof value === "function" ? value(columnFilters) : value);
   };
 
   const handleGlobalFilterChange = (value: string) => {
@@ -60,18 +61,18 @@ export function useTableFilters<TData>({ columns }: UseTableFiltersProps<TData>)
     }
   };
 
-  const handleSelectedColumnChange = (columnId: string | null) => {
-    setSelectedColumn(columnId);
-    setColumnFilters([]);
+  const handleSelectedColumnChange = (value: string | null) => {
+    setSelectedColumn(value);
+    setGlobalFilter("");
   };
 
   return {
     columnFilters,
-    setColumnFilters,
+    setColumnFilters: handleColumnFiltersChange,
     globalFilter,
     setGlobalFilter,
     columnVisibility,
-    setColumnVisibility,
+    setColumnVisibility: handleColumnVisibilityChange,
     selectedColumn,
     columnMap,
     handleColumnVisibilityChange,

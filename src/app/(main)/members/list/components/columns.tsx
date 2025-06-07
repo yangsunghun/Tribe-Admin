@@ -12,7 +12,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
 
 type ExtendedColumnDef<TData> = ColumnDef<TData> & {
   enableSearch?: boolean;
@@ -97,11 +96,8 @@ export const columns: ExtendedColumnDef<User>[] = [
     id: "이메일",
     header: ({ column, table }) => {
       // 테이블 데이터에서 도메인 목록 추출
-      const domains = useMemo(() => {
-        const emails = table.getPreFilteredRowModel().rows.map((row) => row.original.email);
-        const uniqueDomains = Array.from(new Set(emails.map((email) => email.split("@")[1])));
-        return uniqueDomains;
-      }, [table]);
+      const emails = table.getPreFilteredRowModel().rows.map((row) => row.original.email);
+      const domains = Array.from(new Set(emails.map((email) => email.split("@")[1])));
       const currentFilter = column.getFilterValue() as string | undefined;
 
       return (
@@ -148,7 +144,7 @@ export const columns: ExtendedColumnDef<User>[] = [
   {
     accessorKey: "gender",
     id: "성별",
-    header: ({ column, table }) => {
+    header: ({ column }) => {
       const genders = ["남", "여"];
       const currentFilter = column.getFilterValue() as string | undefined;
       return (
@@ -212,10 +208,8 @@ export const columns: ExtendedColumnDef<User>[] = [
     id: "연령대",
     header: ({ column, table }) => {
       // 테이블 데이터에서 연령대 목록 추출
-      const ageGroups = useMemo(() => {
-        const ages = table.getPreFilteredRowModel().rows.map((row) => calculateAgeGroup(row.original.birth_date));
-        return Array.from(new Set(ages));
-      }, [table]);
+      const ages = table.getPreFilteredRowModel().rows.map((row) => calculateAgeGroup(row.original.birth_date));
+      const ageGroups = Array.from(new Set(ages));
       const currentFilter = column.getFilterValue() as string | undefined;
 
       return (

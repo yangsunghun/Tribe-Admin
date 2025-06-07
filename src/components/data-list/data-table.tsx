@@ -11,12 +11,12 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   type OnChangeFn,
-  type Table,
   type VisibilityState
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table as UITable } from "@/components/ui/table";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useState } from "react";
 
 interface DataTableProps<TData> {
@@ -25,12 +25,16 @@ interface DataTableProps<TData> {
   columnFilters: ColumnFiltersState;
   setColumnFilters: OnChangeFn<ColumnFiltersState>;
   globalFilter: string;
-  setGlobalFilter: OnChangeFn<string>;
+  setGlobalFilter: (value: string) => void;
   columnVisibility: VisibilityState;
   setColumnVisibility: OnChangeFn<VisibilityState>;
   selectedColumn: string | null;
-  onSelectedColumnChange: (columnId: string | null) => void;
-  renderToggleVisibility?: (table: Table<TData>) => React.ReactNode;
+  onSelectedColumnChange: (value: string | null) => void;
+}
+
+interface DateRangeFilterValue {
+  from: Date;
+  to?: Date;
 }
 
 export function DataTable<TData>({
@@ -41,8 +45,9 @@ export function DataTable<TData>({
   globalFilter,
   setGlobalFilter,
   columnVisibility,
-  setColumnVisibility,
-  renderToggleVisibility
+  setColumnVisibility
+  //selectedColumn,
+  //onSelectedColumnChange
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -52,50 +57,44 @@ export function DataTable<TData>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: (filters) => {
-      setColumnFilters(filters);
-    },
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
-
     filterFns: {
-      dateRange: (row, columnId, filterValue: any) => {
+      dateRange: (row, columnId, filterValue: DateRangeFilterValue) => {
         const date = row.getValue(columnId) as string;
         if (!date || !filterValue?.from) return true;
 
-        // Convert ISO string to Date object
         const compareDate = new Date(date);
         compareDate.setHours(0, 0, 0, 0);
 
-        const startDate = new Date(filterValue.from);
+        const startDate = filterValue.from;
         startDate.setHours(0, 0, 0, 0);
 
-        const endDate = filterValue.to ? new Date(filterValue.to) : null;
+        const endDate = filterValue.to;
         if (endDate) {
           endDate.setHours(23, 59, 59, 999);
+          return compareDate >= startDate && compareDate <= endDate;
         }
 
-        const isInRange = compareDate >= startDate && (!endDate || compareDate <= endDate);
-
-        return isInRange;
+        return compareDate >= startDate;
       }
     },
-
     state: {
       sorting,
       columnFilters,
+      globalFilter,
       columnVisibility,
-      rowSelection,
-      globalFilter
-    },
-    onGlobalFilterChange: setGlobalFilter
+      rowSelection
+    }
   });
 
   return (
-    <>
+    <div className="space-y-4">
       <div className="rounded-md border">
         <UITable>
           <TableHeader>
@@ -148,71 +147,44 @@ export function DataTable<TData>({
           </select>
         </div>
         <div className="flex items-center space-x-2">
-          {renderToggleVisibility?.(table)}
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            페이지 {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
-          </div>
           <Button
             variant="outline"
-            size="sm"
+            className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            처음
+            <span className="sr-only">Go to first page</span>
+            <ChevronsLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
-            size="sm"
+            className="h-8 w-8 p-0"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            이전
-          </Button>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: table.getPageCount() }, (_, i) => i).map((pageIndex) => {
-              const currentPage = table.getState().pagination.pageIndex;
-              const totalPages = table.getPageCount();
-              const alwaysShow = [0, totalPages - 1];
-              const aroundCurrent = [currentPage - 1, currentPage, currentPage + 1];
-              const shouldShow = alwaysShow.includes(pageIndex) || aroundCurrent.includes(pageIndex);
-              const showEllipsis = pageIndex === 1 || pageIndex === totalPages - 2;
-
-              if (!shouldShow) {
-                if (showEllipsis) {
-                  return (
-                    <span key={pageIndex} className="px-2">
-                      ...
-                    </span>
-                  );
-                }
-                return null;
-              }
-
-              return (
-                <Button
-                  key={pageIndex}
-                  variant={pageIndex === currentPage ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => table.setPageIndex(pageIndex)}
-                >
-                  {pageIndex + 1}
-                </Button>
-              );
-            })}
-          </div>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            다음
+            <span className="sr-only">Go to previous page</span>
+            <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
-            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <span className="sr-only">Go to next page</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            마지막
+            <span className="sr-only">Go to last page</span>
+            <ChevronsRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

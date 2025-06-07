@@ -11,7 +11,11 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+
+interface DateFilterValue {
+  from: string;
+  to?: string;
+}
 
 type ExtendedColumnDef<TData> = ColumnDef<TData> & {
   enableSearch?: boolean | false;
@@ -137,10 +141,8 @@ export const columns: ExtendedColumnDef<Meeting>[] = [
     id: "진행상태",
     header: ({ column, table }) => {
       // 진행상태 목록 추출
-      const statuses = useMemo(() => {
-        const all = table.getPreFilteredRowModel().rows.map((row) => row.original.status);
-        return Array.from(new Set(all));
-      }, [table]);
+      const all = table.getPreFilteredRowModel().rows.map((row) => row.original.status);
+      const statuses = Array.from(new Set(all));
       const currentFilter = column.getFilterValue() as string | undefined;
       return (
         <DropdownMenu>
@@ -191,7 +193,7 @@ export const columns: ExtendedColumnDef<Meeting>[] = [
     cell: ({ row }) => row.original.created_at.slice(0, 10),
     enableSorting: true,
     enableSearch: false,
-    filterFn: (row, columnId, filterValue: any) => {
+    filterFn: (row, columnId, filterValue: DateFilterValue) => {
       const date = row.getValue(columnId) as string;
       if (!date || !filterValue?.from) return true;
 
@@ -223,7 +225,7 @@ export const columns: ExtendedColumnDef<Meeting>[] = [
     cell: ({ row }) => (row.original.expired_at ? row.original.expired_at.slice(0, 10) : "-"),
     enableSorting: true,
     enableSearch: false,
-    filterFn: (row, columnId, filterValue: any) => {
+    filterFn: (row, columnId, filterValue: DateFilterValue) => {
       const date = row.getValue(columnId) as string;
       if (!date || !filterValue?.from) return true;
 
@@ -269,7 +271,7 @@ export const columns: ExtendedColumnDef<Meeting>[] = [
     cell: ({ row }) => row.original.registeredAt.slice(0, 10),
     enableSorting: true,
     enableSearch: false,
-    filterFn: (row, columnId, filterValue: any) => {
+    filterFn: (row, columnId, filterValue: DateFilterValue) => {
       const date = row.getValue(columnId) as string;
       if (!date || !filterValue?.from) return true;
 
@@ -315,7 +317,7 @@ export const columns: ExtendedColumnDef<Meeting>[] = [
     cell: ({ row }) => row.original.updated_at.slice(0, 10),
     enableSorting: true,
     enableSearch: false,
-    filterFn: (row, columnId, filterValue: any) => {
+    filterFn: (row, columnId, filterValue: DateFilterValue) => {
       const date = row.getValue(columnId) as string;
       if (!date || !filterValue?.from) return true;
 

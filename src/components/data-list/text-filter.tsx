@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown, Search, X } from "lucide-react";
-import { useState, type FormEvent } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Search, X } from "lucide-react";
 
 interface TextFilterProps<TData> {
-  columns: (ColumnDef<TData> & { enableSearch?: boolean })[];
+  columns: ColumnDef<TData>[];
   globalFilter: string;
   onGlobalFilterChange: (value: string) => void;
   selectedColumn: string | null;
-  onSelectedColumnChange: (columnId: string | null) => void;
+  onSelectedColumnChange: (value: string | null) => void;
 }
 
 export function TextFilter<TData>({
@@ -20,84 +19,53 @@ export function TextFilter<TData>({
   selectedColumn,
   onSelectedColumnChange
 }: TextFilterProps<TData>) {
-  const [inputValue, setInputValue] = useState(globalFilter);
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onGlobalFilterChange(inputValue);
-  };
-
-  const handleClear = () => {
-    setInputValue("");
-    onGlobalFilterChange("");
-  };
-
-  const columnOptions = columns
-    .filter((column) => {
-      // header가 문자열이고, accessorKey가 있으며, search가 true인 컬럼만 필터링..
-      return (column as any).accessorKey && column.enableSearch !== false;
-    })
-    .map((column) => ({
-      id: (column as any).accessorKey,
-      label: column.id
-    }));
+  const searchableColumns = columns.filter((column) => {
+    const col = column as ColumnDef<TData> & { enableSearch?: boolean };
+    return col.enableSearch;
+  });
 
   const getPlaceholder = () => {
     if (!selectedColumn) return "전체 검색";
-    const selectedLabel = columnOptions.find((col) => col.id === selectedColumn)?.label;
+    const selectedLabel = searchableColumns.find((col) => col.id === selectedColumn)?.id;
     return `${selectedLabel} 검색`;
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button type="button" variant="outline" className="w-[150px] justify-between">
-            {selectedColumn ? columnOptions.find((col) => col.id === selectedColumn)?.label : "전체"}
-            <ChevronDown className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[150px] p-0" align="start">
-          <div className="flex flex-col">
-            <Button variant="ghost" className="w-full justify-start" onClick={() => onSelectedColumnChange(null)}>
-              전체
-            </Button>
-            {columnOptions.map((column) => (
-              <Button
-                key={column.id}
-                variant="ghost"
-                className="w-full justify-start"
-                onClick={() => onSelectedColumnChange(column.id)}
-              >
-                {column.label}
-              </Button>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+    <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-2">
+      <Select value={selectedColumn || "all"} onValueChange={onSelectedColumnChange}>
+        <SelectTrigger className="h-8 w-[150px]">
+          <SelectValue placeholder="검색할 컬럼 선택" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">전체</SelectItem>
+          {searchableColumns.map((column) => (
+            <SelectItem key={column.id} value={column.id as string}>
+              {column.id}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
       <div className="relative">
         <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
         <Input
           placeholder={getPlaceholder()}
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-          className="pl-8"
+          value={globalFilter}
+          onChange={(e) => onGlobalFilterChange(e.target.value)}
+          className="h-8 w-[150px] pl-8"
         />
-        {inputValue && (
+        {globalFilter && (
           <Button
             type="button"
             variant="ghost"
             size="sm"
             className="absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 p-0"
-            onClick={handleClear}
+            onClick={() => onGlobalFilterChange("")}
           >
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
-      <Button type="submit" size="sm">
-        <Search className="h-4 w-4" />
-      </Button>
     </form>
   );
 }
